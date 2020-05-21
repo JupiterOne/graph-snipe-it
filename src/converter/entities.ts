@@ -17,7 +17,7 @@ export const getAccountEntity = (instance: any): Entity => ({
 
 export const getServiceEntity = (instance: any): Entity => ({
   _key: `snipe-it:service:${instance.id}:itam`,
-  _type: 'snipe_service',
+  _type: 'snipeit_service',
   _class: ['Service'],
   name: 'Snipe-IT ITAM',
   displayName: 'Snipe-IT ITAM',

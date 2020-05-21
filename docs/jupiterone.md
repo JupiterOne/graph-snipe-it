@@ -16,16 +16,18 @@ The following entity resources are ingested when the integration runs.
 | Snipe-IT Resources | \_type of the Entity | \_class of the Entity |
 | ------------------ | -------------------- | --------------------- |
 | Account            | `snipeit_account`    | `Account`             |
+| Service            | `snipeit_service`    | `Service`             |
 | Hardware           | `hardware`           | `Device`              |
 | Location           | `location`           | `Site`                |
 
 The following relationships are created:
 
-| From              | Relationship | To         |
-| ----------------- | ------------ | ---------- |
-| `snipeit_account` | **MANAGES**  | `location` |
-| `snipeit_account` | **MANAGES**  | `hardware` |
-| `location`        | **HAS**      | `hardware` |
+| From              | Relationship | To                |
+| ----------------- | ------------ | ----------------- |
+| `snipeit_account` | **PROVIDES** | `location`        |
+| `snipeit_account` | **MANAGES**  | `snipeit_service` |
+| `snipeit_account` | **MANAGES**  | `hardware`        |
+| `location`        | **HAS**      | `hardware`        |
 
 The following relationships are mapped:
 

@@ -24,7 +24,7 @@ const step: IntegrationStep = {
       displayName: instance.name,
       description: instance.description,
     };
-    await jobState.addEntities([accountEntity]);
+    await jobState.addEntity(accountEntity);
 
     const locations = await client.listLocations();
     const entities = locations.map(convertLocation);

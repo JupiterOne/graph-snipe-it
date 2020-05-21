@@ -443,24 +443,25 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@jupiterone/data-model@^0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@jupiterone/data-model/-/data-model-0.4.1.tgz#75405273c07eaab1892ef2a829f5894c6bf5b5a7"
-  integrity sha512-Z5NalEL9yQQ3wdQ0BLzo2rXvvxyURKZmw2V8kVX8UjKExwXBStgoArEIZEklN3l/r3PjjviPJk51V+J9K8+Q4w==
+"@jupiterone/data-model@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@jupiterone/data-model/-/data-model-0.5.2.tgz#0df52c376bc8517cc7986efd80ef11d07a4b62fe"
+  integrity sha512-pN3zDAhTbmqsQcTOet42aQ7yducMCt2/akj2k/Xfuh0oVflSG68EycXyqPKa+I+16FYBUtXDqjQ54Oc89XS4jg==
   dependencies:
     ajv "^6.12.0"
 
-"@jupiterone/integration-sdk@^1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk/-/integration-sdk-1.1.3.tgz#28f86d1104e611f24ef4c66c15c2f7cf7e1ed2d0"
-  integrity sha512-E9ZeuzC45C+iq5MNnQZ7M+7leUfwDw3RtgX4bMK74Byxy4y3X99rvcxAHTyb71E9fBEUCp39C/vhJOlyuTgXkQ==
+"@jupiterone/integration-sdk@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk/-/integration-sdk-2.1.2.tgz#a33c7c5fe58b375303a4f56802bdbb3aa8f0a254"
+  integrity sha512-/3K6qaU0tzfON6+oemrArctJkaIxgDkxpE0s627LbHHe3QaEcO2rzL9etaO7cNjsaR8Q1tbiz6eLaX/2AgWJ5Q==
   dependencies:
-    "@jupiterone/data-model" "^0.4.1"
+    "@jupiterone/data-model" "^0.5.2"
     "@lifeomic/alpha" "^1.1.3"
     "@pollyjs/adapter-node-http" "^4.0.4"
     "@pollyjs/core" "^4.0.4"
     "@pollyjs/persister-fs" "^4.0.4"
     "@types/bunyan" "^1.8.6"
+    "@types/har-format" "^1.2.4"
     "@types/pollyjs__adapter-node-http" "^2.0.0"
     "@types/pollyjs__core" "^4.0.0"
     "@types/pollyjs__persister" "^2.0.1"

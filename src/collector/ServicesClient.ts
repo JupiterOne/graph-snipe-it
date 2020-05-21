@@ -6,7 +6,7 @@ import { retryableRequestError, fatalRequestError } from './error';
 import { PaginatedResponse } from './types';
 import { URLSearchParams } from 'url';
 
-interface ServicesClientInput {
+export interface ServicesClientInput {
   hostname: string;
   apiToken: string;
 }

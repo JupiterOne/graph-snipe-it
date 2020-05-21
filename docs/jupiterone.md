@@ -31,8 +31,8 @@ The following relationships are created:
 
 The following relationships are mapped:
 
-| From     | Relationship | To                 |
-| -------- | ------------ | ------------------ |
-| `Person` | **HAS**      | `snipeit_hardware` |
+| From     | Relationship | To       |
+| -------- | ------------ | -------- |
+| `Person` | \*\*HAS      | OWNS\*\* | `snipeit_hardware` |
 
 [1]: https://snipe-it.readme.io/reference

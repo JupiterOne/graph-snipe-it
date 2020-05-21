@@ -20,6 +20,8 @@ The following entity resources are ingested when the integration runs.
 | Hardware           | `hardware`           | `Device`              |
 | Location           | `location`           | `Site`                |
 
+## Relationships
+
 The following relationships are created:
 
 | From              | Relationship | To                |

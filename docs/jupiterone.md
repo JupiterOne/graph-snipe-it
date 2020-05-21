@@ -24,8 +24,8 @@ The following relationships are created:
 
 | From              | Relationship | To                |
 | ----------------- | ------------ | ----------------- |
-| `snipeit_account` | **PROVIDES** | `location`        |
-| `snipeit_account` | **MANAGES**  | `snipeit_service` |
+| `snipeit_account` | **PROVIDES** | `snipeit_service` |
+| `snipeit_account` | **MANAGES**  | `location`        |
 | `snipeit_account` | **MANAGES**  | `hardware`        |
 | `location`        | **HAS**      | `hardware`        |
 

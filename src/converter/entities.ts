@@ -20,7 +20,7 @@ export const convertHardware = (
         assetId: data.id,
         displayName: data.name,
         activatedOn: getTime(data.activated_on),
-        assignedUser: data.assigned_to?.user_name,
+        username: data.assigned_to?.user_name,
         assetTag: data.asset_tag,
         category: data.category?.name,
         manufacturer: data.manufacturer?.name,

@@ -9,7 +9,7 @@ import { convertLocation } from '../../converter';
 const step: IntegrationStep = {
   id: 'fetch-account',
   name: 'Fetch Account related data',
-  types: ['snipeit_account'],
+  types: ['snipeit_account', 'snipeit_location'],
   async executionHandler({
     instance,
     jobState,

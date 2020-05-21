@@ -33,7 +33,7 @@ test('should process hardware entities', async () => {
   expect(context.jobState.collectedEntities).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        _type: 'snipeit_hardware',
+        _type: 'hardware',
         _class: ['Device'],
         id: expect.any(String),
         displayName: expect.any(String),

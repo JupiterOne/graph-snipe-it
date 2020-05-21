@@ -3,7 +3,28 @@ import {
   createIntegrationEntity,
   getTime,
   convertProperties,
+  Entity,
 } from '@jupiterone/integration-sdk';
+
+export const getAccountEntity = (instance: any): Entity => ({
+  _key: `snipe-it:account:${instance.id}`,
+  _type: 'snipeit_account',
+  _class: ['Account'],
+  name: instance.name,
+  displayName: instance.name,
+  description: instance.description,
+});
+
+export const getServiceEntity = (instance: any): Entity => ({
+  _key: `snipe-it:service:${instance.id}:itam`,
+  _type: 'snipe_service',
+  _class: ['Service'],
+  name: 'Snipe-IT ITAM',
+  displayName: 'Snipe-IT ITAM',
+  description: 'IT Asset Management (ITAM)',
+  category: 'infrastructure',
+  function: 'ITAM',
+});
 
 export const convertHardware = (
   data: any,
@@ -13,10 +34,10 @@ export const convertHardware = (
       source: data,
       assign: {
         ...convertProperties(data),
-        _key: `snipe-it:hardware:${data.id}`,
-        _type: 'snipeit_hardware',
+        _key: `hardware:${data.id}`,
+        _type: 'hardware',
         _class: ['Device'],
-        id: `snipe-it:hardware:${data.id}`,
+        id: `hardware:${data.id}`,
         assetId: data.id,
         displayName: data.name,
         activatedOn: getTime(data.activated_on),
@@ -32,6 +53,8 @@ export const convertHardware = (
         status:
           data.status_label?.status_meta === 'deployable'
             ? 'ready'
+            : data.status_label?.name?.match(/broken/i)
+            ? 'defective'
             : data.status_label?.status_meta,
         notes: data.notes ? [data.notes] : undefined,
         location: data.location?.name,
@@ -50,10 +73,10 @@ export const convertLocation = (
       source: data,
       assign: {
         ...convertProperties(data),
-        _key: `snipe-it:location:${data.id}`,
-        _type: 'snipeit_location',
+        _key: `location:${data.id}`,
+        _type: 'location',
         _class: ['Site'],
-        id: `snipe-it:location:${data.id}`,
+        id: `location:${data.id}`,
         locationId: data.id,
         displayName: data.name,
         createdOn: getTime(data.created_at?.datetime),

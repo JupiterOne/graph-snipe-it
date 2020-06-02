@@ -1,7 +1,6 @@
 import {
   IntegrationStep,
   IntegrationStepExecutionContext,
-  createIntegrationRelationship,
 } from '@jupiterone/integration-sdk';
 import { IntegrationConfig } from 'src/types';
 import { createServicesClient } from '../../collector';

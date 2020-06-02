@@ -49,6 +49,21 @@ test('should process hardware entities', async () => {
           }),
         },
       }),
+      expect.objectContaining({
+        _key: expect.any(String),
+        _class: 'HAS',
+        _type: 'site_has_hardware',
+        _mapping: {
+          relationshipDirection: 'FORWARD',
+          sourceEntityKey: expect.any(String),
+          targetFilterKeys: [['_class', 'id', 'locationId']],
+          targetEntity: expect.objectContaining({
+            _class: 'Device',
+            id: expect.any(String),
+            locationId: expect.any(Number),
+          }),
+        },
+      }),
     ]),
   );
 });

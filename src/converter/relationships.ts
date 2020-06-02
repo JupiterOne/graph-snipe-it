@@ -8,6 +8,7 @@ import {
 
 export const DEVICE_MANAGEMENT_RELATIONSHIP =
   'snipeit_account_manages_hardware';
+export const DEVICE_LOCATION_RELATIONSHIP = 'site_has_hardware';
 
 export const mapHardwareRelationship = (
   account: Entity,
@@ -35,9 +36,9 @@ export const mapHardwareLocationRelationship = (
   hardware: Entity,
 ): Relationship =>
   createIntegrationRelationship({
-    _key: `location:${hardware.locationId}|manages|${hardware._key}`,
+    _key: `location:${hardware.locationId}|has|${hardware._key}`,
     _class: 'HAS',
-    _type: DEVICE_MANAGEMENT_RELATIONSHIP,
+    _type: DEVICE_LOCATION_RELATIONSHIP,
     _mapping: {
       relationshipDirection: RelationshipDirection.FORWARD,
       sourceEntityKey: `location:${hardware.locationId}`,

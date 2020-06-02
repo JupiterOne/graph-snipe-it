@@ -29,15 +29,25 @@ test('should process hardware entities', async () => {
   const context = createStepContext();
   await step.executionHandler(context);
 
-  expect(context.jobState.collectedEntities).toHaveLength(1328);
-  expect(context.jobState.collectedEntities).toEqual(
+  expect(context.jobState.collectedRelationships).toHaveLength(2651);
+  expect(context.jobState.collectedRelationships).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        _type: 'hardware',
-        _class: ['Device'],
-        id: expect.any(String),
-        displayName: expect.any(String),
-        createdOn: expect.any(Number),
+        _key: expect.any(String),
+        _class: 'MANAGES',
+        _type: 'snipeit_account_manages_hardware',
+        _mapping: {
+          relationshipDirection: 'FORWARD',
+          sourceEntityKey: expect.any(String),
+          targetFilterKeys: [['_class', 'serial']],
+          targetEntity: expect.objectContaining({
+            _type: 'hardware',
+            _class: ['Device'],
+            id: expect.any(String),
+            displayName: expect.any(String),
+            createdOn: expect.any(Number),
+          }),
+        },
       }),
     ]),
   );

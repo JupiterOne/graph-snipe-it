@@ -5,11 +5,7 @@ import nodeFetch, { Request } from 'node-fetch';
 import { retryableRequestError, fatalRequestError } from './error';
 import { PaginatedResponse } from './types';
 import { URLSearchParams } from 'url';
-
-export interface ServicesClientInput {
-  hostname: string;
-  apiToken: string;
-}
+import { IntegrationConfig } from 'src/types';
 
 /**
  * Services Api
@@ -19,7 +15,7 @@ export class ServicesClient {
   readonly hostname: string;
   readonly apiToken: string;
 
-  constructor(config: ServicesClientInput) {
+  constructor(config: IntegrationConfig) {
     this.hostname = config.hostname.toLowerCase().replace(/^https?:\/\//, '');
     this.apiToken = config.apiToken;
   }

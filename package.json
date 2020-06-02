@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-snipe-it",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A graph conversion tool for https://snipeitapp.com/",
   "license": "MPL-2.0",
   "main": "dist/index.js",
@@ -25,7 +25,7 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk": "^2.1.2",
+    "@jupiterone/integration-sdk": "^3.1.0",
     "@lifeomic/attempt": "^3.0.0",
     "base-64": "^0.1.0",
     "node-fetch": "^2.6.0"

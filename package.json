@@ -25,7 +25,7 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@jupiterone/integration-sdk": "^2.1.2",
+    "@jupiterone/integration-sdk": "^3.1.0",
     "@lifeomic/attempt": "^3.0.0",
     "base-64": "^0.1.0",
     "node-fetch": "^2.6.0"

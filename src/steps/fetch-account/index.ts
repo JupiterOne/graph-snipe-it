@@ -10,6 +10,7 @@ import {
   getAccountEntity,
   getServiceEntity,
 } from '../../converter';
+import { IntegrationConfig } from 'src/types';
 
 const step: IntegrationStep = {
   id: 'fetch-account',
@@ -18,7 +19,7 @@ const step: IntegrationStep = {
   async executionHandler({
     instance,
     jobState,
-  }: IntegrationStepExecutionContext) {
+  }: IntegrationStepExecutionContext<IntegrationConfig>) {
     const client = createServicesClient(instance);
 
     const accountEntity = getAccountEntity(instance);

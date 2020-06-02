@@ -8,6 +8,7 @@ import {
   convertHardware,
   getAccountEntity,
   DEVICE_MANAGEMENT_RELATIONSHIP,
+  DEVICE_LOCATION_RELATIONSHIP,
   mapHardwareRelationship,
   mapHardwareLocationRelationship,
 } from '../../converter';
@@ -15,7 +16,11 @@ import {
 const step: IntegrationStep = {
   id: 'fetch-hardware',
   name: 'Fetch Snipe-IT listing of hardware assets',
-  types: ['hardware', DEVICE_MANAGEMENT_RELATIONSHIP],
+  types: [
+    'hardware', // Deprecated. Step creates mapped entities intead.
+    DEVICE_MANAGEMENT_RELATIONSHIP,
+    DEVICE_LOCATION_RELATIONSHIP,
+  ],
   async executionHandler({
     instance,
     jobState,

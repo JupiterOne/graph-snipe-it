@@ -1,4 +1,4 @@
-import { createMockStepExecutionContext } from '@jupiterone/integration-sdk/testing';
+import { createMockStepExecutionContext } from '@jupiterone/integration-sdk-testing';
 
 export function createStepContext(): ReturnType<
   typeof createMockStepExecutionContext

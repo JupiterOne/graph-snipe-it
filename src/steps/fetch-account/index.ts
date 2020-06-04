@@ -2,7 +2,7 @@ import {
   IntegrationStep,
   IntegrationStepExecutionContext,
   createIntegrationRelationship,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
 import {
@@ -10,12 +10,18 @@ import {
   getAccountEntity,
   getServiceEntity,
 } from '../../converter';
-import { IntegrationConfig } from 'src/types';
+import { IntegrationConfig } from '../../types';
 
 const step: IntegrationStep = {
   id: 'fetch-account',
   name: 'Fetch Account related data',
-  types: ['snipeit_account', 'location'],
+  types: [
+    'snipeit_account',
+    'snipeit_service',
+    'location',
+    'snipeit_account_provides_service',
+    'snipeit_account_manages_location',
+  ],
   async executionHandler({
     instance,
     jobState,

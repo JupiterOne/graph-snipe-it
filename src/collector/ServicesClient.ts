@@ -5,7 +5,7 @@ import nodeFetch, { Request } from 'node-fetch';
 import { retryableRequestError, fatalRequestError } from './error';
 import { PaginatedResponse } from './types';
 import { URLSearchParams } from 'url';
-import { IntegrationConfig } from 'src/types';
+import { IntegrationConfig } from '../types';
 
 /**
  * Services Api

@@ -1,8 +1,8 @@
 import {
   IntegrationStep,
   IntegrationStepExecutionContext,
-} from '@jupiterone/integration-sdk';
-import { IntegrationConfig } from 'src/types';
+} from '@jupiterone/integration-sdk-core';
+import { IntegrationConfig } from '../../types';
 import { createServicesClient } from '../../collector';
 import {
   convertHardware,

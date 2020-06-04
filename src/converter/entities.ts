@@ -4,7 +4,7 @@ import {
   getTime,
   convertProperties,
   Entity,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 
 export const getAccountEntity = (instance: any): Entity => ({
   _key: `snipe-it:account:${instance.id}`,

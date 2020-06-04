@@ -4,7 +4,7 @@ import {
   Relationship,
   RelationshipDirection,
   convertProperties,
-} from '@jupiterone/integration-sdk';
+} from '@jupiterone/integration-sdk-core';
 
 export const DEVICE_MANAGEMENT_RELATIONSHIP =
   'snipeit_account_manages_hardware';

@@ -1,6 +1,6 @@
-import { IntegrationInstance } from '@jupiterone/integration-sdk';
+import { IntegrationInstance } from '@jupiterone/integration-sdk-core';
 import { ServicesClient } from './ServicesClient';
-import { IntegrationConfig } from 'src/types';
+import { IntegrationConfig } from '../types';
 
 export * from './types';
 

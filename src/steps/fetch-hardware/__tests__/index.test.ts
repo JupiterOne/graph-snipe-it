@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { createStepContext } from 'test';
-import { Recording, setupRecording } from '@jupiterone/integration-sdk/testing';
+import { createStepContext } from '../../../../test';
+import { Recording, setupRecording } from '@jupiterone/integration-sdk-testing';
 
 import step from '../index';
 

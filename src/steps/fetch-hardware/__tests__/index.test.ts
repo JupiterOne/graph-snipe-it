@@ -62,6 +62,7 @@ test('should process hardware entities', async () => {
             id: expect.any(String),
             locationId: expect.any(Number),
           }),
+          skipTargetCreation: true,
         },
       }),
     ]),

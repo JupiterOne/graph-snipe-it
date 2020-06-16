@@ -48,6 +48,6 @@ export const mapHardwareLocationRelationship = (
         id: hardware.id,
         locationId: hardware.locationId,
       },
+      skipTargetCreation: true,
     },
-    skipTargetCreation: true,
   });

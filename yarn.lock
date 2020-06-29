@@ -660,17 +660,6 @@
   dependencies:
     ajv "^6.12.0"
 
-"@jupiterone/integration-sdk-cli@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk-cli/-/integration-sdk-cli-1.0.2.tgz#ac992da1b4f9fe9c92bc6d259034311ca6423578"
-  integrity sha512-+3hRNm+9Z7JKPlpmXipHTrnZZ48VRvSl/9RHk14vQUpnIxyNM0TDryZHEf7GTZc8/h6K6rNRTQ5Q1XnD6ZTv2g==
-  dependencies:
-    "@jupiterone/integration-sdk-runtime" "^1.0.2"
-    commander "^5.0.0"
-    globby "^11.0.0"
-    upath "^1.2.0"
-    vis "^4.21.0-EOL"
-
 "@jupiterone/integration-sdk-cli@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk-cli/-/integration-sdk-cli-2.2.0.tgz#08db46147f9ff6781d8c7ce6aa9ad27efcff05ce"
@@ -681,16 +670,6 @@
     globby "^11.0.0"
     upath "^1.2.0"
     vis "^4.21.0-EOL"
-
-"@jupiterone/integration-sdk-core@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk-core/-/integration-sdk-core-1.0.2.tgz#7cf96b3088d511e86a75191a4e9ba0b3ef548c7f"
-  integrity sha512-CF3IFgqn+mEIx+eoYicJkR5lCtVS1BkwAmbu15z11rhwDttMLatNP7v3hbTNEMJ4o84DQfkP872McWy/f/Td/g==
-  dependencies:
-    "@jupiterone/data-model" "^0.6.4"
-    axios "^0.19.2"
-    lodash "^4.17.15"
-    uuid "^7.0.3"
 
 "@jupiterone/integration-sdk-core@^2.2.0":
   version "2.2.0"
@@ -720,28 +699,6 @@
     prettier "^2.0.5"
     ts-jest "^26.0.0"
     typescript "^3.9.3"
-
-"@jupiterone/integration-sdk-runtime@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@jupiterone/integration-sdk-runtime/-/integration-sdk-runtime-1.0.2.tgz#b2e0091d7a24769c11a071d57ec54bbb53112844"
-  integrity sha512-AyXPZvOsSccng8wmXVKulLfEBVf6Fer/fVGfNbk7/vmUIAOmhK05AR4c/xtI6S4wLX57N3/JPBNYoWkbh+HBqQ==
-  dependencies:
-    "@jupiterone/integration-sdk-core" "^1.0.2"
-    "@lifeomic/alpha" "^1.1.3"
-    async-sema "^3.1.0"
-    axios "^0.19.2"
-    bunyan "^1.8.12"
-    bunyan-format "^0.2.1"
-    dependency-graph "^0.9.0"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
-    globby "^11.0.0"
-    jsonwebtoken "^8.5.1"
-    lodash "^4.17.15"
-    p-map "^4.0.0"
-    p-queue "^6.3.0"
-    rimraf "^3.0.2"
-    uuid "^7.0.3"
 
 "@jupiterone/integration-sdk-runtime@^2.2.0":
   version "2.2.0"

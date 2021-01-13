@@ -1,7 +1,9 @@
-import { createMockExecutionContext } from '@jupiterone/integration-sdk-testing';
-import validateInvocation from '../validateInvocation';
 import fetchMock from 'jest-fetch-mock';
+
+import { createMockExecutionContext } from '@jupiterone/integration-sdk-testing';
+
 import { IntegrationConfig } from '../types';
+import validateInvocation from '../validateInvocation';
 
 beforeEach(() => {
   fetchMock.doMock();
@@ -11,7 +13,7 @@ test('rejects if apiToken is not present', async () => {
   fetchMock.mockResponse('{}');
 
   const context = createMockExecutionContext<IntegrationConfig>();
-  context.instance.config['apiToken'] = undefined;
+  context.instance.config['apiToken'] = (undefined as unknown) as string;
 
   await expect(validateInvocation(context)).rejects.toThrow(
     /Provider authentication failed/,

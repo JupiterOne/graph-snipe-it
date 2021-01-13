@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { createStepContext } from '../../../../test';
 import { Recording, setupRecording } from '@jupiterone/integration-sdk-testing';
 
-import step from '../index';
+import { fetchHardwareAssets } from '../index';
 
 let recording: Recording;
 
@@ -27,7 +26,7 @@ test('should process hardware entities', async () => {
   });
 
   const context = createStepContext();
-  await step.executionHandler(context);
+  await fetchHardwareAssets(context);
 
   expect(context.jobState.collectedRelationships).toHaveLength(2651);
   expect(context.jobState.collectedRelationships).toEqual(

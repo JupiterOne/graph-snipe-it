@@ -1,10 +1,11 @@
-import { retry } from '@lifeomic/attempt';
 import nodeFetch, { Request } from 'node-fetch';
-
-import { retryableRequestError, fatalRequestError } from './error';
-import { PaginatedResponse } from './types';
 import { URLSearchParams } from 'url';
+
+import { retry } from '@lifeomic/attempt';
+
 import { IntegrationConfig } from '../types';
+import { fatalRequestError, retryableRequestError } from './error';
+import { HardwareAsset, PaginatedResponse, SnipeItUser } from './types';
 
 /**
  * Services Api
@@ -23,8 +24,33 @@ export class ServicesClient {
     return this.fetch('hardware', { limit: '1' });
   }
 
-  listHardware(): Promise<object[]> {
-    return this.iterateAll('hardware');
+  async fetchUser(username: string): Promise<SnipeItUser | undefined> {
+    const usersResponse = await this.fetch<PaginatedResponse>('users', {
+      search: username,
+    });
+    if (usersResponse.total > 0) return usersResponse.rows[0];
+  }
+
+  async iterateHardware(
+    iteratee: (asset: HardwareAsset) => Promise<void>,
+  ): Promise<void> {
+    const limit = 500;
+    let offset = 0;
+    let total = 0;
+
+    do {
+      const response: PaginatedResponse = await this.fetch('hardware', {
+        offset: offset.toString(),
+      });
+      if (!response.rows) {
+        break;
+      }
+      total = response.total;
+      offset += limit;
+      for (const resource of response.rows) {
+        await iteratee(resource);
+      }
+    } while (offset < total);
   }
 
   listLocations(): Promise<object[]> {

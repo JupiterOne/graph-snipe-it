@@ -1,52 +1,58 @@
 import {
-  IntegrationStep,
-  IntegrationStepExecutionContext,
-  MappedRelationship,
-  RelationshipClass,
+    IntegrationStep, IntegrationStepExecutionContext, MappedRelationship, RelationshipClass
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
 import {
-  convertHardware,
-  DEVICE_LOCATION_RELATIONSHIP,
-  DEVICE_MANAGEMENT_RELATIONSHIP,
-  getAccountEntity,
-  mapHardwareLocationRelationship,
-  mapHardwareRelationship,
+    convertHardware, DEVICE_LOCATION_RELATIONSHIP, DEVICE_MANAGEMENT_RELATIONSHIP, getAccountEntity,
+    mapHardwareLocationRelationship, mapHardwareRelationship
 } from '../../converter';
 import { IntegrationConfig } from '../../types';
 
 export async function fetchHardwareAssets({
+  logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const client = createServicesClient(instance);
   const accountEntity = getAccountEntity(instance);
 
-  const hardware = await client.listHardware();
+  await client.iterateHardware(async (device) => {
+    const assignedUser = device.assigned_to;
+    const user = await client.fetchUser(assignedUser.username);
 
-  const hardwareEntities = hardware.map(convertHardware);
-  const relationships: MappedRelationship[] = [];
-  hardwareEntities.forEach((hardwareEntity) => {
-    if (hardwareEntity.macAddress) {
+    // Do not add to graph directly, this is used as the target of a number of
+    // mapped relationships
+    const targetEntity = convertHardware(device, user);
+
+    const relationships: MappedRelationship[] = [];
+    if (targetEntity.macAddress) {
       relationships.push(
-        mapHardwareRelationship(accountEntity, hardwareEntity, 'macAddress'),
+        mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
       );
-    } else if (hardwareEntity.serial) {
+    } else if (targetEntity.serial) {
       relationships.push(
-        mapHardwareRelationship(accountEntity, hardwareEntity, 'serial'),
+        mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
       );
-    } else {
+    } else if (targetEntity.hardwareId) {
       relationships.push(
-        mapHardwareRelationship(accountEntity, hardwareEntity, 'hardwareId'),
+        mapHardwareRelationship(accountEntity, targetEntity, 'hardwareId'),
       );
     }
 
-    if (hardwareEntity.locationId) {
-      relationships.push(mapHardwareLocationRelationship(hardwareEntity));
+    if (targetEntity.locationId) {
+      relationships.push(mapHardwareLocationRelationship(targetEntity));
+    }
+
+    if (relationships.length !== 0) {
+      await jobState.addRelationships(relationships);
+    } else {
+      logger.warn(
+        { assetId: device.assetId, username: assignedUser?.username },
+        'Hardware asset has no supported identifier, mapped relationship not created',
+      );
     }
   });
-  await jobState.addRelationships(relationships);
 }
 
 export const hardwareSteps: IntegrationStep<IntegrationConfig>[] = [

@@ -1,35 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  createIntegrationEntity,
-  getTime,
   convertProperties,
+  createIntegrationEntity,
   Entity,
+  getTime,
 } from '@jupiterone/integration-sdk-core';
 
-export const getAccountEntity = (instance: any): Entity => ({
-  _key: `snipe-it:account:${instance.id}`,
-  _type: 'snipeit_account',
-  _class: ['Account'],
-  name: instance.name,
-  displayName: instance.name,
-  description: instance.description,
-});
+import { HardwareAsset, SnipeItUser } from '../collector';
 
-export const getServiceEntity = (instance: any): Entity => ({
-  _key: `snipe-it:service:${instance.id}:itam`,
-  _type: 'snipeit_service',
-  _class: ['Service'],
-  name: 'Snipe-IT ITAM',
-  displayName: 'Snipe-IT ITAM',
-  description: 'IT Asset Management (ITAM)',
-  category: 'infrastructure',
-  function: 'ITAM',
-});
+export function getAccountEntity(instance: any): Entity {
+  return {
+    _key: `snipe-it:account:${instance.id}`,
+    _type: 'snipeit_account',
+    _class: ['Account'],
+    name: instance.name,
+    displayName: instance.name,
+    description: instance.description,
+  };
+}
 
-export const convertHardware = (
-  data: any,
-): ReturnType<typeof createIntegrationEntity> =>
-  createIntegrationEntity({
+export function getServiceEntity(instance: any): Entity {
+  return {
+    _key: `snipe-it:service:${instance.id}:itam`,
+    _type: 'snipeit_service',
+    _class: ['Service'],
+    name: 'Snipe-IT ITAM',
+    displayName: 'Snipe-IT ITAM',
+    description: 'IT Asset Management (ITAM)',
+    category: 'infrastructure',
+    function: 'ITAM',
+  };
+}
+
+export function convertHardware(
+  data: HardwareAsset,
+  user?: SnipeItUser,
+): ReturnType<typeof createIntegrationEntity> {
+  return createIntegrationEntity({
     entityData: {
       source: data,
       assign: {
@@ -41,7 +48,8 @@ export const convertHardware = (
         assetId: data.id,
         displayName: data.name,
         activatedOn: getTime(data.activated_on),
-        username: data.assigned_to?.user_name,
+        username: user?.username || data.assigned_to?.username,
+        email: user?.email,
         assetTag: data.asset_tag,
         category: data.category?.name,
         manufacturer: data.manufacturer?.name,
@@ -64,11 +72,12 @@ export const convertHardware = (
       },
     },
   });
+}
 
-export const convertLocation = (
+export function convertLocation(
   data: any,
-): ReturnType<typeof createIntegrationEntity> =>
-  createIntegrationEntity({
+): ReturnType<typeof createIntegrationEntity> {
+  return createIntegrationEntity({
     entityData: {
       source: data,
       assign: {
@@ -84,3 +93,4 @@ export const convertLocation = (
       },
     },
   });
+}

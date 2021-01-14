@@ -9,7 +9,7 @@ afterEach(async () => {
   await recording.stop();
 });
 
-test('should process hardware entities', async () => {
+test.skip('should process hardware entities', async () => {
   jest.setTimeout(10000);
 
   recording = setupRecording({

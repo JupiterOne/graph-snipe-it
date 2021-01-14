@@ -1,9 +1,9 @@
 import { createMockStepExecutionContext } from '@jupiterone/integration-sdk-testing';
 
-export function createStepContext(): ReturnType<
-  typeof createMockStepExecutionContext
-> {
-  return createMockStepExecutionContext({
+import { IntegrationConfig } from '../src/types';
+
+export function createStepContext() {
+  return createMockStepExecutionContext<IntegrationConfig>({
     instanceConfig: {
       hostname: process.env.HOSTNAME || 'develop.snipeitapp.com',
       apiToken: process.env.API_TOKEN || 'test',

@@ -9,32 +9,51 @@ Configure the integration by providing an API Token with read-only permissions.
 Obtain an API token from the bottom of the "Manage API Keys" page in your
 Snipe-IT account.
 
-## Entities
+<!-- {J1_DOCUMENTATION_MARKER_START} -->
+<!--
+********************************************************************************
+NOTE: ALL OF THE FOLLOWING DOCUMENTATION IS GENERATED USING THE
+"j1-integration document" COMMAND. DO NOT EDIT BY HAND! PLEASE SEE THE DEVELOPER
+DOCUMENTATION FOR USAGE INFORMATION:
 
-The following entity resources are ingested when the integration runs.
+https://github.com/JupiterOne/sdk/blob/master/docs/integrations/development.md
+********************************************************************************
+-->
 
-| Snipe-IT Resources | \_type of the Entity | \_class of the Entity |
-| ------------------ | -------------------- | --------------------- |
-| Account            | `snipeit_account`    | `Account`             |
-| Service            | `snipeit_service`    | `Service`             |
-| Hardware           | `hardware`           | `Device`              |
-| Location           | `location`           | `Site`                |
+## Data Model
 
-## Relationships
+### Entities
 
-The following relationships are created:
+The following entities are created:
 
-| From              | Relationship | To                |
-| ----------------- | ------------ | ----------------- |
-| `snipeit_account` | **PROVIDES** | `snipeit_service` |
-| `snipeit_account` | **MANAGES**  | `location`        |
-| `snipeit_account` | **MANAGES**  | `hardware`        |
-| `location`        | **HAS**      | `hardware`        |
+| Resources | Entity `_type`    | Entity `_class` |
+| --------- | ----------------- | --------------- |
+| Account   | `snipeit_account` | `Account`       |
+| Location  | `location`        | `Site`          |
+| Service   | `snipeit_service` | `Service`       |
+
+### Relationships
+
+The following relationships are created/mapped:
+
+| Source Entity `_type` | Relationship `_class` | Target Entity `_type` |
+| --------------------- | --------------------- | --------------------- |
+| `site`                | **HAS**               | `hardware`            |
+| `snipeit_account`     | **MANAGES**           | `hardware`            |
+| `snipeit_account`     | **MANAGES**           | `location`            |
+| `snipeit_account`     | **PROVIDES**          | `snipeit_service`     |
+
+<!--
+********************************************************************************
+END OF GENERATED DOCUMENTATION AFTER BELOW MARKER
+********************************************************************************
+-->
+<!-- {J1_DOCUMENTATION_MARKER_END} -->
 
 The following relationships are mapped:
 
-| From     | Relationship  | To                 |
-| -------- | ------------- | ------------------ |
-| `Person` | **HAS\|OWNS** | `snipeit_hardware` |
+| From     | Relationship  | To         |
+| -------- | ------------- | ---------- |
+| `Person` | **HAS\|OWNS** | `hardware` |
 
 [1]: https://snipe-it.readme.io/reference

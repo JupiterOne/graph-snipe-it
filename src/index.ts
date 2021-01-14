@@ -1,13 +1,12 @@
 import { IntegrationInvocationConfig } from '@jupiterone/integration-sdk-core';
 
 import instanceConfigFields from './instanceConfigFields';
+import { integrationSteps } from './steps';
+import { IntegrationConfig } from './types';
 import validateInvocation from './validateInvocation';
 
-import fetchAccount from './steps/fetch-account';
-import fetchHardware from './steps/fetch-hardware';
-
-export const invocationConfig: IntegrationInvocationConfig = {
+export const invocationConfig: IntegrationInvocationConfig<IntegrationConfig> = {
   instanceConfigFields,
   validateInvocation,
-  integrationSteps: [fetchAccount, fetchHardware],
+  integrationSteps,
 };

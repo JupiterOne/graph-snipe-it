@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { retry } from '@lifeomic/attempt';
 import nodeFetch, { Request } from 'node-fetch';
 
@@ -33,7 +32,7 @@ export class ServicesClient {
   }
 
   async iterateAll<T = object[]>(url: string): Promise<T> {
-    const data = [];
+    const data: any[] = [];
     const limit = 500;
     let offset = 0;
     let total = 0;

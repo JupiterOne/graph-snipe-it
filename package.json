@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-snipe-it",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "A graph conversion tool for https://snipeitapp.com/",
   "license": "MPL-2.0",
   "main": "dist/index.js",

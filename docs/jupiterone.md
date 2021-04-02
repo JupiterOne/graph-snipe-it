@@ -1,5 +1,25 @@
 # JupiterOne Managed Integration for Snipe-IT
 
+## Snipe-IT + JupiterOne Integration Benefits
+
+- Visualize Snipe-IT account locations, hardware, and hardware owners in the
+  JupiterOne graph.
+- Map Snipe-IT users to the hardware they have or own.
+- Monitor changes to locations, hardware, and hardware owners using using
+  JupiterOne alerts.
+
+## How it Works
+
+- JupiterOne periodically fetches Snipe-IT hardware and owners data to update the graph.
+- Write JupiterOne queries to review and monitor updates to the graph.
+- Configure alerts to take action when the JupiterOne graph changes.
+
+## Requirements
+
+- JupiterOne requires the hostname of your Snipe-IT account as well as an 
+API Token configured for read access.
+- You must have permission in JupiterOne to install new integrations.
+
 ## Overview
 
 JupiterOne provides a managed integration for Snipe-IT. The integration connects

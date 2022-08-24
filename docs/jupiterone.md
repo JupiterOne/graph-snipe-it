@@ -1,4 +1,4 @@
-# Integration with JupiterOne
+# Snipe-IT 
 
 ## Snipe-IT + JupiterOne Integration Benefits
 
@@ -34,7 +34,7 @@ on how to generate an API token.
 
 ### In JupiterOne
 
-1. From the configuration **Gear Icon**, select **Integrations**.
+1. From the top navigation of the J1 Search homepage, select **Integrations**
 2. Scroll to the **Snipe-IT** integration tile and click it.
 3. Click the **Add Configuration** button and configure the following settings:
 - Enter the **Account Name** by which you'd like to identify this Snipe-IT
@@ -51,7 +51,7 @@ read access.
 
 ## How to Uninstall
 
-1. From the configuration **Gear Icon**, select **Integrations**.
+1. From the top navigation of the J1 Search homepage, select **Integrations**
 2. Scroll to the **Snipe-IT** integration tile and click it.
 3. Identify and click the **integration to delete**.
 4. Click the **trash can** icon.

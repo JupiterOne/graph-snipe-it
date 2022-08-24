@@ -1,11 +1,18 @@
 import {
-    IntegrationStep, IntegrationStepExecutionContext, MappedRelationship, RelationshipClass
+  IntegrationStep,
+  IntegrationStepExecutionContext,
+  MappedRelationship,
+  RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
 import {
-    convertHardware, DEVICE_LOCATION_RELATIONSHIP, DEVICE_MANAGEMENT_RELATIONSHIP, getAccountEntity,
-    mapHardwareLocationRelationship, mapHardwareRelationship
+  convertHardware,
+  DEVICE_LOCATION_RELATIONSHIP,
+  DEVICE_MANAGEMENT_RELATIONSHIP,
+  getAccountEntity,
+  mapHardwareLocationRelationship,
+  mapHardwareRelationship,
 } from '../../converter';
 import { IntegrationConfig } from '../../types';
 
@@ -17,12 +24,10 @@ export async function fetchHardwareAssets({
   const client = createServicesClient(instance);
   const accountEntity = getAccountEntity(instance);
 
-    await client.iterateHardware(async (device) => {
-      const assignedUser = device.assigned_to;
-      const username = assignedUser?.username || assignedUser
-      const user = username
-        ? await client.fetchUser(username)
-        : undefined;
+  await client.iterateHardware(async (device) => {
+    const assignedUser = device.assigned_to;
+    const username = assignedUser?.username || assignedUser;
+    const user = username ? await client.fetchUser(username) : undefined;
 
     // Do not add to graph directly, this is used as the target of a number of
     // mapped relationships

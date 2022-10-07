@@ -57,6 +57,22 @@ export class ServicesClient {
     return this.iterateAll('locations');
   }
 
+  listConsumables(): Promise<object[]> {
+    return this.iterateAll('consumables');
+  }
+
+  listHardwareLicenses(id: number): Promise<object[]> {
+    return this.iterateAll(`hardware/${id}/licenses`);
+  }
+
+  listUsers(): Promise<object[]> {
+    return this.iterateAll('users');
+  }
+
+  listConsumableUsers(consumableId: string): Promise<object[]> {
+    return this.iterateAll(`consumables/view/${consumableId}/users`);
+  }
+
   async iterateAll<T = object[]>(url: string): Promise<T> {
     const data: any[] = [];
     const limit = 500;
@@ -65,6 +81,7 @@ export class ServicesClient {
     do {
       const response: PaginatedResponse = await this.fetch(url, {
         offset: offset.toString(),
+        limit: limit.toString(),
       });
       if (!response.rows) {
         break;

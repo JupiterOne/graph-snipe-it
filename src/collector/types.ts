@@ -12,3 +12,6 @@ export interface PaginatedResponse {
 
 export type HardwareAsset = Opaque<any, 'HardwareAsset'>;
 export type SnipeItUser = Opaque<any, 'SnipeItUser'>;
+export type SnipeItConsumable = Opaque<any, 'SnipeItConsumable'>;
+export type SnipeItLicense = Opaque<any, 'SnipeItLicense'>;
+export type ConsumableUser = Opaque<any, 'ConsumableUser'>;

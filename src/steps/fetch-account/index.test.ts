@@ -17,6 +17,7 @@ test('fetchAccount', async () => {
       recordFailedRequests: false,
       matchRequestsBy: {
         url: {
+          protocol: false,
           query: false,
         },
       },

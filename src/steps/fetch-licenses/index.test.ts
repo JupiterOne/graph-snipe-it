@@ -19,6 +19,7 @@ test('fetchLicensedApplications', async () => {
       recordFailedRequests: false,
       matchRequestsBy: {
         url: {
+          protocol: false,
           query: false,
         },
       },

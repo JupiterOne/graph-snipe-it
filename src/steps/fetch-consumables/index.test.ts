@@ -22,6 +22,7 @@ test('fetchConsumableResources', async () => {
       recordFailedRequests: false,
       matchRequestsBy: {
         url: {
+          protocol: false,
           query: false,
         },
       },
@@ -88,6 +89,7 @@ test('buildUserConsumableRelationships', async () => {
       recordFailedRequests: false,
       matchRequestsBy: {
         url: {
+          protocol: false,
           query: false,
         },
       },

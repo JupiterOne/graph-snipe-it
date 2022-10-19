@@ -18,6 +18,7 @@ test('fetchHardwareAssets', async () => {
       recordFailedRequests: false,
       matchRequestsBy: {
         url: {
+          protocol: false,
           query: false,
         },
       },

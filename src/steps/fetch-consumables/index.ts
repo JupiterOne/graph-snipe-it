@@ -48,6 +48,10 @@ export async function buildUserConsumableRelationships({
         consumableEntity.consumableId as string,
       );
 
+      // currently, the list of users that use a consumables is returned
+      // as a list of HTML elements containing URL links to those users
+      // cheerio, a jQuery implementation for the server side, is used
+      // to easily manipulate the HTML elements and retrieve the user Id
       consumableUsers.map(async (consumableUser) => {
         if ((consumableUser as ConsumableUser).name) {
           const $ = cheerio.load((consumableUser as ConsumableUser).name);

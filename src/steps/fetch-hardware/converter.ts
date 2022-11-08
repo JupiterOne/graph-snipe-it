@@ -31,6 +31,7 @@ export function convertHardware(
         _class: Entities.HARDWARE._class,
         id: getHardwareKey(data.id),
         assetId: data.id,
+        deviceId: `${data.id}`,
         displayName: data.name,
         activatedOn: parseTimePropertyValue(data.activated_on),
         username: user?.username || data.assigned_to?.username,

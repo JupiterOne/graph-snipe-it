@@ -10,6 +10,7 @@ and this project adheres to
 
 - Reorganized files
 - Added more test cases
+- Updated J1 SDK packages to v8.x
 - Added new entities and relationships:
 
 ### Entities

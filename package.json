@@ -16,27 +16,29 @@
     "graph": "j1-integration visualize",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "format": "prettier --write '**/*.{ts,js,json,css,md,yml}'",
-    "type-check": "tsc",
+    "type-check": "tsc --skipLibCheck",
     "test": "jest",
     "test:ci": "yarn lint && yarn type-check && yarn test",
     "prebuild": "yarn test:ci",
     "prepush": "yarn lint && yarn type-check && yarn test",
-    "build": "tsc -p tsconfig.dist.json --declaration",
+    "build": "tsc -p tsconfig.dist.json --declaration --skipLibCheck",
     "prepack": "yarn build"
   },
   "dependencies": {
     "@lifeomic/attempt": "^3.0.0",
     "base-64": "^0.1.0",
+    "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@jupiterone/integration-sdk-core": "^5.5.0",
-    "@jupiterone/integration-sdk-dev-tools": "^5.5.0",
-    "@jupiterone/integration-sdk-testing": "^5.5.0",
+    "@jupiterone/integration-sdk-core": "^8.28.0",
+    "@jupiterone/integration-sdk-dev-tools": "^8.28.0",
+    "@jupiterone/integration-sdk-testing": "^8.28.0",
+    "@types/node": "^18.8.3",
     "jest-fetch-mock": "^3.0.3",
     "type-fest": "^0.20.2"
   },
   "peerDependencies": {
-    "@jupiterone/integration-sdk-core": "^5.5.0"
+    "@jupiterone/integration-sdk-core": "^8.28.0"
   }
 }

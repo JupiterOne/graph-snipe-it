@@ -1,20 +1,19 @@
 import {
+  Entity,
   IntegrationStep,
   IntegrationStepExecutionContext,
   MappedRelationship,
-  RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
 import {
   convertHardware,
-  DEVICE_LOCATION_RELATIONSHIP,
-  DEVICE_MANAGEMENT_RELATIONSHIP,
-  getAccountEntity,
   mapHardwareLocationRelationship,
   mapHardwareRelationship,
-} from '../../converter';
+} from './converter';
 import { IntegrationConfig } from '../../types';
+import { HARDWARE_IDS, MappedRelationships, Steps } from '../constants';
+import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 
 export async function fetchHardwareAssets({
   logger,
@@ -22,30 +21,35 @@ export async function fetchHardwareAssets({
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const client = createServicesClient(instance);
-  const accountEntity = getAccountEntity(instance);
+  const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
+  const hardwareIds: number[] = [];
 
   await client.iterateHardware(async (device) => {
     const assignedUser = device.assigned_to;
     const username = assignedUser?.username || assignedUser;
     const user = username ? await client.fetchUser(username) : undefined;
 
+    hardwareIds.push(device.id);
+
     // Do not add to graph directly, this is used as the target of a number of
     // mapped relationships
     const targetEntity = convertHardware(device, user);
 
     const relationships: MappedRelationship[] = [];
-    if (targetEntity.macAddress) {
-      relationships.push(
-        mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
-      );
-    } else if (targetEntity.serial) {
-      relationships.push(
-        mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
-      );
-    } else if (targetEntity.hardwareId) {
-      relationships.push(
-        mapHardwareRelationship(accountEntity, targetEntity, 'hardwareId'),
-      );
+    if (accountEntity) {
+      if (targetEntity.macAddress) {
+        relationships.push(
+          mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
+        );
+      } else if (targetEntity.serial) {
+        relationships.push(
+          mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
+        );
+      } else if (targetEntity.hardwareId) {
+        relationships.push(
+          mapHardwareRelationship(accountEntity, targetEntity, 'hardwareId'),
+        );
+      }
     }
 
     if (targetEntity.locationId) {
@@ -61,27 +65,33 @@ export async function fetchHardwareAssets({
       );
     }
   });
+
+  await jobState.setData(HARDWARE_IDS, hardwareIds);
 }
 
 export const hardwareSteps: IntegrationStep<IntegrationConfig>[] = [
   {
-    id: 'fetch-hardware',
+    id: Steps.HARDWARE,
     name: 'Fetch Snipe-IT listing of hardware assets',
     entities: [],
-    relationships: [
+    relationships: [],
+    mappedRelationships: [
       {
-        _class: RelationshipClass.MANAGES,
-        _type: DEVICE_MANAGEMENT_RELATIONSHIP,
-        sourceType: 'snipeit_account',
-        targetType: 'hardware',
+        _class: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._class,
+        _type: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._type,
+        sourceType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.sourceType,
+        targetType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.targetType,
+        direction: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.direction,
       },
       {
-        _class: RelationshipClass.HAS,
-        _type: DEVICE_LOCATION_RELATIONSHIP,
-        sourceType: 'site',
-        targetType: 'hardware',
+        _class: MappedRelationships.LOCATION_HAS_HARDWARE._class,
+        _type: MappedRelationships.LOCATION_HAS_HARDWARE._type,
+        sourceType: MappedRelationships.LOCATION_HAS_HARDWARE.sourceType,
+        targetType: MappedRelationships.LOCATION_HAS_HARDWARE.targetType,
+        direction: MappedRelationships.LOCATION_HAS_HARDWARE.direction,
       },
     ],
+    dependsOn: [Steps.ACCOUNT],
     executionHandler: fetchHardwareAssets,
   },
 ];

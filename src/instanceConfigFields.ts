@@ -1,6 +1,7 @@
 import { IntegrationInstanceConfigFieldMap } from '@jupiterone/integration-sdk-core';
+import { IntegrationConfig } from './types';
 
-const instanceConfigFields: IntegrationInstanceConfigFieldMap = {
+export const instanceConfigFields: IntegrationInstanceConfigFieldMap<IntegrationConfig> = {
   hostname: {
     type: 'string',
   },
@@ -9,5 +10,3 @@ const instanceConfigFields: IntegrationInstanceConfigFieldMap = {
     mask: true,
   },
 };
-
-export default instanceConfigFields;

@@ -5,13 +5,16 @@ import {
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
 
-import { createServicesClient } from '../collector';
+import { createServicesClient } from '../../collector';
 import {
   convertLocation,
   getAccountEntity,
   getServiceEntity,
-} from '../converter';
-import { IntegrationConfig } from '../types';
+} from './converter';
+import { IntegrationConfig } from '../../types';
+import { Steps, Entities, Relationships } from './../constants';
+
+export const ACCOUNT_ENTITY_KEY = 'entity:account';
 
 export async function fetchAccount({
   instance,
@@ -21,6 +24,7 @@ export async function fetchAccount({
 
   const accountEntity = getAccountEntity(instance);
   await jobState.addEntity(accountEntity);
+  await jobState.setData(ACCOUNT_ENTITY_KEY, accountEntity);
 
   const serviceEntity = getServiceEntity(instance);
   await jobState.addEntity(serviceEntity);
@@ -48,25 +52,37 @@ export async function fetchAccount({
 
 export const accountSteps: IntegrationStep<IntegrationConfig>[] = [
   {
-    id: 'fetch-account',
+    id: Steps.ACCOUNT,
     name: 'Fetch Account related data',
     entities: [
-      { _class: 'Account', _type: 'snipeit_account', resourceName: 'Account' },
-      { _class: 'Service', _type: 'snipeit_service', resourceName: 'Service' },
-      { _class: 'Site', _type: 'location', resourceName: 'Location' },
+      {
+        _class: Entities.ACCOUNT._class,
+        _type: Entities.ACCOUNT._type,
+        resourceName: Entities.ACCOUNT.resourceName,
+      },
+      {
+        _class: Entities.SERVICE._class,
+        _type: Entities.SERVICE._type,
+        resourceName: Entities.SERVICE.resourceName,
+      },
+      {
+        _class: Entities.LOCATION._class,
+        _type: Entities.LOCATION._type,
+        resourceName: Entities.LOCATION.resourceName,
+      },
     ],
     relationships: [
       {
-        _class: RelationshipClass.PROVIDES,
-        _type: 'snipeit_account_provides_service',
-        sourceType: 'snipeit_account',
-        targetType: 'snipeit_service',
+        _class: Relationships.ACCOUNT_PROVIDES_SERVICE._class,
+        _type: Relationships.ACCOUNT_PROVIDES_SERVICE._type,
+        sourceType: Relationships.ACCOUNT_PROVIDES_SERVICE.sourceType,
+        targetType: Relationships.ACCOUNT_PROVIDES_SERVICE.targetType,
       },
       {
-        _class: RelationshipClass.MANAGES,
-        _type: 'snipeit_account_manages_location',
-        sourceType: 'snipeit_account',
-        targetType: 'location',
+        _class: Relationships.ACCOUNT_MANAGES_LOCATION._class,
+        _type: Relationships.ACCOUNT_MANAGES_LOCATION._type,
+        sourceType: Relationships.ACCOUNT_MANAGES_LOCATION.sourceType,
+        targetType: Relationships.ACCOUNT_MANAGES_LOCATION.targetType,
       },
     ],
     executionHandler: fetchAccount,

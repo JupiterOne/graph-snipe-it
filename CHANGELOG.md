@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.0 - 2022-11-10
+
 - Reorganized files
 - Added more test cases
 - Updated J1 SDK packages to v8.x

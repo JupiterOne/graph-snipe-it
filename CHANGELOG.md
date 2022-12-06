@@ -8,6 +8,14 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Fixed
+
+- Assigned `unknown` value if hardware `manufacturer`, `make` or `model` field
+  is undefined.
+- Fixed part corresponding to iterating hardware assigned user.
+- Cleaned up code for creating hardware related mapped relationships (we can
+  only access the `serial` value).
+
 ## 2.0.0 - 2022-11-10
 
 - Reorganized files

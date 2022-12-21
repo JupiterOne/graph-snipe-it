@@ -20,6 +20,8 @@ test('fetchHardwareAssets', async () => {
         url: {
           protocol: false,
           query: false,
+          hostname: false,
+          port: false,
         },
       },
     },

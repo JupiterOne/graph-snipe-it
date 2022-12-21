@@ -25,9 +25,11 @@ export async function fetchHardwareAssets({
   const hardwareIds: number[] = [];
 
   await client.iterateHardware(async (device) => {
-    const assignedUser = device.assigned_to;
-    const username = assignedUser?.username || assignedUser;
-    const user = username ? await client.fetchUser(username) : undefined;
+    const assignedTo = device.assigned_to;
+    const user =
+      assignedTo?.type === 'user'
+        ? await client.fetchUser(assignedTo.username as string)
+        : undefined;
 
     hardwareIds.push(device.id);
 
@@ -36,20 +38,10 @@ export async function fetchHardwareAssets({
     const targetEntity = convertHardware(device, user);
 
     const relationships: MappedRelationship[] = [];
-    if (accountEntity) {
-      if (targetEntity.macAddress) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
-        );
-      } else if (targetEntity.serial) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
-        );
-      } else if (targetEntity.hardwareId) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'hardwareId'),
-        );
-      }
+    if (accountEntity && targetEntity.serial) {
+      relationships.push(
+        mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
+      );
     }
 
     if (targetEntity.locationId) {
@@ -60,7 +52,7 @@ export async function fetchHardwareAssets({
       await jobState.addRelationships(relationships);
     } else {
       logger.warn(
-        { assetId: device.assetId, username: assignedUser?.username },
+        { assetId: device.id, username: user?.username },
         'Hardware asset has no supported identifier, mapped relationship not created',
       );
     }

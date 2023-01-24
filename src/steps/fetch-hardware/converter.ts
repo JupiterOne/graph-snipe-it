@@ -21,27 +21,32 @@ export function convertHardware(
   data: HardwareAsset,
   user?: SnipeItUser,
 ): ReturnType<typeof createIntegrationEntity> {
+  const hardwareId = data.id;
+  const hardwareKey = getHardwareKey(hardwareId);
+  const manufacturer = data.manufacturer?.name ?? null;
+  const displayName = data.name || String(hardwareId);
+
   return createIntegrationEntity({
     entityData: {
       source: data,
       assign: {
         ...convertProperties(data),
-        _key: getHardwareKey(data.id),
+        _key: hardwareKey,
         _type: Entities.HARDWARE._type,
         _class: Entities.HARDWARE._class,
-        id: getHardwareKey(data.id),
-        assetId: data.id,
-        deviceId: `${data.id}`,
-        displayName: data.name,
+        id: hardwareKey,
+        assetId: hardwareId,
+        deviceId: String(hardwareId),
+        displayName,
         activatedOn: parseTimePropertyValue(data.activated_on),
         username: user?.username || data.assigned_to?.username,
         userId: user?.id || data.assigned_to?.id,
         email: user?.email,
         assetTag: data.asset_tag,
-        category: data.category?.name,
-        manufacturer: data.manufacturer?.name,
-        make: data.manufacturer?.name,
-        model: data.model?.name,
+        category: data.category?.name ?? null,
+        manufacturer,
+        make: manufacturer,
+        model: data.model?.name ?? null,
         serial: data.serial,
         supplier: data.supplier?.name,
         EOL: !!data.eol,

@@ -24,7 +24,7 @@ export function convertHardware(
   const hardwareId = data.id;
   const hardwareKey = getHardwareKey(hardwareId);
   const manufacturer = data.manufacturer?.name ?? null;
-  const displayName = data.name || String(hardwareId);
+  const displayName = data.name || data.serial;
 
   return createIntegrationEntity({
     entityData: {

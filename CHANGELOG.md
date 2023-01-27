@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Re-release attempt
+
 ## 2.0.0 - 2022-11-10
 
 - Reorganized files

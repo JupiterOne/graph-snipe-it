@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.1 - 2023-01-27
+
+### Fixed
+
+- `Device.displayName` was set to null in some cases, add default for it
+
 ## 2.0.0 - 2022-11-10
 
 - Reorganized files

@@ -38,14 +38,14 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@jupiterone/integration-sdk-core": "^8.28.0",
-    "@jupiterone/integration-sdk-dev-tools": "^8.28.0",
-    "@jupiterone/integration-sdk-testing": "^8.28.0",
+    "@jupiterone/integration-sdk-core": "^8.30.2",
+    "@jupiterone/integration-sdk-dev-tools": "^8.30.2",
+    "@jupiterone/integration-sdk-testing": "^8.30.2",
     "@types/node": "^18.8.3",
     "jest-fetch-mock": "^3.0.3",
     "type-fest": "^0.20.2"
   },
   "peerDependencies": {
-    "@jupiterone/integration-sdk-core": "^8.28.0"
+    "@jupiterone/integration-sdk-core": "^8.30.2"
   }
 }

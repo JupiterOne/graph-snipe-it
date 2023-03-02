@@ -8,6 +8,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Updated `package.json` file (`main`, `types` and `files` section).
+- Updated `build.yaml` file to latest patterns.
+- Ran prettier.
+- Added `questions.yaml` file.
+
 ## 2.0.1 - 2023-01-27
 
 ### Fixed

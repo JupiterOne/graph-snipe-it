@@ -66,17 +66,17 @@ src/
 ```
 
 Each of the files listed above contribute to creating an
-[integration configuration](https://github.com/JupiterOne/integration-sdk/blob/master/docs/development.md#the-integration-framework).
+[integration configuration](https://github.com/JupiterOne/integration-sdk/blob/main/docs/development.md#the-integration-framework).
 
 Additional files can be placed under `src` and referenced from each of the
 integration files.
 
 The template project hosted
-[here](https://github.com/JupiterOne/integration-sdk/tree/master/template)
+[here](https://github.com/JupiterOne/integration-sdk/tree/main/template)
 provides a simple example of how an integration can be setup.
 
 ## Development Docs
 
 Please reference the `@jupiterone/integration-sdk`
-[development documentation](https://github.com/JupiterOne/integration-sdk/blob/master/docs/development.md)
+[development documentation](https://github.com/JupiterOne/integration-sdk/blob/main/docs/development.md)
 for more information on how to build integrations.

@@ -1,0 +1,4 @@
+---
+sourceId: managed:snipe-it
+integrationDefinitionId: '${integration_definition_id}'
+questions: []

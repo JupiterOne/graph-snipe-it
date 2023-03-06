@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.2 - 2023-03-06
+
 ### Changed
 
 - Updated `package.json` file (`main`, `types` and `files` section).

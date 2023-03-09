@@ -1,13 +1,12 @@
 import {
   createIntegrationEntity,
-  convertProperties,
   parseTimePropertyValue,
   Entity,
   MappedRelationship,
   createMappedRelationship,
   RelationshipDirection,
 } from '@jupiterone/integration-sdk-core';
-import { SnipeItLicense } from '../../collector';
+import { HardwareLicense } from '../../collector';
 import { Entities, MappedRelationships } from '../constants';
 import { getHardwareKey } from '../fetch-hardware/converter';
 
@@ -16,40 +15,38 @@ export function getLicenseKey(id: string): string {
 }
 
 export function convertLicense(
-  data: SnipeItLicense,
+  data: HardwareLicense,
 ): ReturnType<typeof createIntegrationEntity> {
   return createIntegrationEntity({
     entityData: {
       source: data,
       assign: {
-        ...convertProperties(data),
-        _key: getLicenseKey(data.id),
+        _key: getLicenseKey(String(data.id)),
         _type: Entities.LICENSE._type,
         _class: Entities.LICENSE._class,
-        id: getLicenseKey(data.id),
+        id: getLicenseKey(String(data.id)),
         licenseId: data.id,
         displayName: data.name,
-        company: data.company,
+        company: data.company?.name,
         'manufacturer.id': data.manufacturer?.id,
         'manufacturer.name': data.manufacturer?.name,
         productKey: data.product_key,
         orderNumber: data.order_number,
         purchaseOrder: data.purchase_order,
-        purchaseDate: parseTimePropertyValue(data.purchase_date?.date),
-        terminationDate: parseTimePropertyValue(data.termination_date?.date),
-        depreciation: data.depreciation,
+        purchaseDate: parseTimePropertyValue(data.purchase_date?.datetime),
+        terminationDate: parseTimePropertyValue(
+          data.termination_date?.datetime,
+        ),
+        depreciation: data.depreciation?.name,
         purchaseCost: data.purchase_cost_numeric ?? data.purchase_cost,
         notes: data.notes ? [data.notes] : undefined,
-        expirationDate: data.expiration_date?.date
-          ? parseTimePropertyValue(data.expiration_date?.date)
-          : data.expiration_date,
+        expirationDate: parseTimePropertyValue(data.expiration_date?.datetime),
         seats: data.seats,
         freeSeatsCount: data.free_seats_count,
         licenseName: data.license_name,
         licenseEmail: data.license_email,
         reassignable: data.reassignable,
         maintained: data.maintained,
-        supplier: data.supplier,
         'supplier.id': data.supplier?.id,
         'supplier.name': data.supplier?.name,
         'category.id': data.category?.id,

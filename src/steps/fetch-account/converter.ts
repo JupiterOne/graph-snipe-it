@@ -4,6 +4,7 @@ import {
   convertProperties,
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
+import { Location } from '../../collector';
 import { Entities } from '../constants';
 
 export function getAccountKey(id: string): string {
@@ -14,7 +15,7 @@ export function getServiceKey(id: string): string {
   return `snipeit_service:${id}:itam`;
 }
 
-export function getLocationKey(id: string): string {
+export function getLocationKey(id: number): string {
   return `location:${id}`;
 }
 
@@ -43,7 +44,7 @@ export function getServiceEntity(instance: any): Entity {
 }
 
 export function convertLocation(
-  data: any,
+  data: Location,
 ): ReturnType<typeof createIntegrationEntity> {
   return createIntegrationEntity({
     entityData: {

@@ -1,6 +1,7 @@
 import {
   createDirectRelationship,
   Entity,
+  IntegrationProviderAPIError,
   IntegrationStep,
   IntegrationStepExecutionContext,
   RelationshipClass,
@@ -12,7 +13,6 @@ import { IntegrationConfig } from '../../types';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { Steps, Entities, Relationships } from '../constants';
 import { getUserKey } from '../fetch-users/converter';
-import { FatalRequestError } from '../../collector/error';
 import { ServicesClient } from '../../collector/ServicesClient';
 
 export async function fetchConsumableResources({
@@ -30,7 +30,7 @@ export async function fetchConsumableResources({
   try {
     consumableResources = await client.listConsumables();
   } catch (err) {
-    if (err instanceof FatalRequestError && err.statusCode === 403) {
+    if (err instanceof IntegrationProviderAPIError && err.status === 403) {
       logger.info(
         `Skipped step "${Steps.CONSUMABLES}". The required permission was not provided to perform this step.`,
       );

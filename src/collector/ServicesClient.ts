@@ -4,7 +4,7 @@ import { URLSearchParams } from 'url';
 import { retry } from '@lifeomic/attempt';
 
 import { IntegrationConfig } from '../types';
-import { fatalRequestError, retryableRequestError } from './error';
+import { retryableRequestError } from './error';
 import {
   HardwareAsset,
   PaginatedResponse,
@@ -15,6 +15,7 @@ import {
   ConsumableUser,
   Location,
 } from './types';
+import { IntegrationProviderAPIError } from '@jupiterone/integration-sdk-core';
 
 /**
  * Services Api
@@ -129,7 +130,12 @@ export class ServicesClient {
         if (isRetryableRequest(response)) {
           throw retryableRequestError(response);
         } else {
-          throw fatalRequestError(response);
+          throw new IntegrationProviderAPIError({
+            code: 'SnipeItClientApiError',
+            status: response.status,
+            endpoint: response.url,
+            statusText: response.statusText,
+          });
         }
       },
       {

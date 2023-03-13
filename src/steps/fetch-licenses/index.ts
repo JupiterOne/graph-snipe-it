@@ -1,6 +1,7 @@
 import {
   createDirectRelationship,
   Entity,
+  IntegrationProviderAPIError,
   IntegrationStep,
   IntegrationStepExecutionContext,
   RelationshipClass,
@@ -20,7 +21,6 @@ import {
   Relationships,
   Steps,
 } from '../constants';
-import { FatalRequestError } from '../../collector/error';
 
 export async function fetchLicensedApplications({
   instance,
@@ -48,7 +48,7 @@ export async function fetchLicensedApplications({
         );
       });
     } catch (err) {
-      if (err instanceof FatalRequestError && err.statusCode === 403) {
+      if (err instanceof IntegrationProviderAPIError && err.status === 403) {
         logger.info(
           `Skipped step "${Steps.LICENSES}". The required permission was not provided to perform this step.`,
         );

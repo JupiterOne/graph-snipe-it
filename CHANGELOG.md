@@ -8,6 +8,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+## 2.0.3 - 2023-03-15
+
+### Fixed
+
+- Consumable, License and User entities types and fields.
+- Added authorization error handling.
+
 ## 2.0.2 - 2023-03-06
 
 ### Changed

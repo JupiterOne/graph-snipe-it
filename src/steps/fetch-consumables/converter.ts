@@ -1,12 +1,11 @@
 import {
   createIntegrationEntity,
-  convertProperties,
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
 import { SnipeItConsumable } from '../../collector';
 import { Entities } from '../constants';
 
-export function getConsumableKey(id: string): string {
+export function getConsumableKey(id: number): string {
   return `snipeit_consumable_resource:${id}`;
 }
 
@@ -17,7 +16,6 @@ export function convertConsumable(
     entityData: {
       source: data,
       assign: {
-        ...convertProperties(data),
         _key: getConsumableKey(data.id),
         _type: Entities.CONSUMABLE._type,
         _class: Entities.CONSUMABLE._class,
@@ -30,7 +28,6 @@ export function convertConsumable(
         'company.id': data.company?.id,
         'company.name': data.company?.name,
         itemNo: data.item_no,
-        location: data.location,
         'location.id': data.location?.id,
         'location.name': data.location?.name,
         'manufacturer.id': data.manufacturer?.id,
@@ -40,7 +37,7 @@ export function convertConsumable(
         remaining: data.remaining,
         orderNumber: data.order_number,
         purchaseCost: data.purchase_cost,
-        purchaseDate: parseTimePropertyValue(data.purchase_date?.date),
+        purchaseDate: parseTimePropertyValue(data.purchase_date?.datetime),
         qty: data.qty,
         notes: data.notes ? [data.notes] : undefined,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),

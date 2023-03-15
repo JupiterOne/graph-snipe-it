@@ -9,9 +9,3 @@ export function retryableRequestError(response: Response): RetryableError {
     `Encountered retryable response from provider (status=${response.status})`,
   );
 }
-
-export function fatalRequestError(response: Response): Error {
-  return new Error(
-    `Encountered unexpected response from provider (status="${response.status}")`,
-  );
-}

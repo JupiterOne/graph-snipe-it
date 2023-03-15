@@ -1,26 +1,44 @@
 import {
   createDirectRelationship,
   Entity,
+  IntegrationProviderAPIError,
   IntegrationStep,
   IntegrationStepExecutionContext,
   RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
 import * as cheerio from 'cheerio';
-import { ConsumableUser, createServicesClient } from '../../collector';
+import { createServicesClient } from '../../collector';
 import { convertConsumable } from './converter';
 import { IntegrationConfig } from '../../types';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { Steps, Entities, Relationships } from '../constants';
 import { getUserKey } from '../fetch-users/converter';
+import { ServicesClient } from '../../collector/ServicesClient';
 
 export async function fetchConsumableResources({
   instance,
   jobState,
+  logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const client = createServicesClient(instance);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
-  const consumableResources = await client.listConsumables();
+  let consumableResources: Awaited<
+    ReturnType<ServicesClient['listConsumables']>
+  >;
+
+  try {
+    consumableResources = await client.listConsumables();
+  } catch (err) {
+    if (err instanceof IntegrationProviderAPIError && err.status === 403) {
+      logger.info(
+        `Skipped step "${Steps.CONSUMABLES}". The required permission was not provided to perform this step.`,
+      );
+      return;
+    }
+    throw err;
+  }
+
   const consumableResourceEntities = consumableResources.map(convertConsumable);
   await jobState.addEntities(consumableResourceEntities);
 
@@ -53,8 +71,8 @@ export async function buildUserConsumableRelationships({
       // cheerio, a jQuery implementation for the server side, is used
       // to easily manipulate the HTML elements and retrieve the user Id
       consumableUsers.map(async (consumableUser) => {
-        if ((consumableUser as ConsumableUser).name) {
-          const $ = cheerio.load((consumableUser as ConsumableUser).name);
+        if (consumableUser.name) {
+          const $ = cheerio.load(consumableUser.name);
           const userLink = $('a').attr('href') as string;
           const userId = userLink.split('/').pop() as string;
 

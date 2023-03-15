@@ -4,8 +4,18 @@ import { URLSearchParams } from 'url';
 import { retry } from '@lifeomic/attempt';
 
 import { IntegrationConfig } from '../types';
-import { fatalRequestError, retryableRequestError } from './error';
-import { HardwareAsset, PaginatedResponse, SnipeItUser } from './types';
+import { retryableRequestError } from './error';
+import {
+  HardwareAsset,
+  PaginatedResponse,
+  SnipeItUser,
+  ResourceIteratee,
+  HardwareLicense,
+  SnipeItConsumable,
+  ConsumableUser,
+  Location,
+} from './types';
+import { IntegrationProviderAPIError } from '@jupiterone/integration-sdk-core';
 
 /**
  * Services Api
@@ -25,61 +35,59 @@ export class ServicesClient {
   }
 
   async fetchUser(username: string): Promise<SnipeItUser | undefined> {
-    const usersResponse = await this.fetch<PaginatedResponse>('users', {
-      search: username,
-    });
+    const usersResponse = await this.fetch<PaginatedResponse<SnipeItUser>>(
+      'users',
+      {
+        search: username,
+      },
+    );
     if (usersResponse.total > 0) return usersResponse.rows[0];
   }
 
-  async iterateHardware(
-    iteratee: (asset: HardwareAsset) => Promise<void>,
-  ): Promise<void> {
-    const limit = 500;
-    let offset = 0;
-    let total = 0;
-
-    do {
-      const response: PaginatedResponse = await this.fetch('hardware', {
-        offset: offset.toString(),
-      });
-      if (!response.rows) {
-        break;
-      }
-      total = response.total;
-      offset += limit;
-      for (const resource of response.rows) {
-        await iteratee(resource);
-      }
-    } while (offset < total);
+  async iterateHardware(iteratee: ResourceIteratee<HardwareAsset>) {
+    const hardwareAssets = await this.iterateAll<HardwareAsset>('hardware');
+    for (const hardware of hardwareAssets) {
+      await iteratee(hardware);
+    }
   }
 
-  listLocations(): Promise<object[]> {
-    return this.iterateAll('locations');
+  listLocations() {
+    return this.iterateAll<Location>('locations');
   }
 
-  listConsumables(): Promise<object[]> {
-    return this.iterateAll('consumables');
+  listConsumables() {
+    return this.iterateAll<SnipeItConsumable>('consumables');
   }
 
-  listHardwareLicenses(id: number): Promise<object[]> {
-    return this.iterateAll(`hardware/${id}/licenses`);
+  async iterateHardwareLicenses(
+    id: number,
+    iteratee: ResourceIteratee<HardwareLicense>,
+  ) {
+    const licenses = await this.iterateAll<HardwareLicense>(
+      `hardware/${id}/licenses`,
+    );
+    for (const license of licenses) {
+      await iteratee(license);
+    }
   }
 
-  listUsers(): Promise<object[]> {
-    return this.iterateAll('users');
+  listUsers() {
+    return this.iterateAll<SnipeItUser>('users');
   }
 
-  listConsumableUsers(consumableId: string): Promise<object[]> {
-    return this.iterateAll(`consumables/view/${consumableId}/users`);
+  listConsumableUsers(consumableId: string) {
+    return this.iterateAll<ConsumableUser>(
+      `consumables/view/${consumableId}/users`,
+    );
   }
 
-  async iterateAll<T = object[]>(url: string): Promise<T> {
-    const data: any[] = [];
+  async iterateAll<T = unknown>(url: string): Promise<T[]> {
+    const data: T[] = [];
     const limit = 500;
     let offset = 0;
     let total = 0;
     do {
-      const response: PaginatedResponse = await this.fetch(url, {
+      const response = await this.fetch<PaginatedResponse<T>>(url, {
         offset: offset.toString(),
         limit: limit.toString(),
       });
@@ -90,7 +98,7 @@ export class ServicesClient {
       offset += limit;
       data.push(...response.rows);
     } while (offset < total);
-    return (data as unknown) as T;
+    return data;
   }
 
   fetch<T = object>(
@@ -122,7 +130,12 @@ export class ServicesClient {
         if (isRetryableRequest(response)) {
           throw retryableRequestError(response);
         } else {
-          throw fatalRequestError(response);
+          throw new IntegrationProviderAPIError({
+            code: 'SnipeItClientApiError',
+            status: response.status,
+            endpoint: response.url,
+            statusText: response.statusText,
+          });
         }
       },
       {

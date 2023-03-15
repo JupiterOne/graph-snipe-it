@@ -93,14 +93,14 @@ export function mapHardwareLocationRelationship(
   hardware: Entity,
 ): MappedRelationship {
   return createMappedRelationship({
-    _key: `${getLocationKey(hardware.locationId as string)}|has|${
+    _key: `${getLocationKey(hardware.locationId as number)}|has|${
       hardware._key
     }`,
     _class: MappedRelationships.LOCATION_HAS_HARDWARE._class,
     _type: MappedRelationships.LOCATION_HAS_HARDWARE._type,
     _mapping: {
       relationshipDirection: RelationshipDirection.FORWARD,
-      sourceEntityKey: getLocationKey(hardware.locationId as string),
+      sourceEntityKey: getLocationKey(hardware.locationId as number),
       targetFilterKeys: [['_class', 'id', 'locationId']],
       targetEntity: {
         // not sure if it was inteded, but previously,

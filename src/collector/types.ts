@@ -78,6 +78,46 @@ export interface HardwareLicense {
   };
 }
 
+export interface SnipeItHardware {
+  id: number;
+  name: string;
+  asset_tag: string;
+  serial: string;
+  model: RecordSummary;
+  model_number: string;
+  last_checkout: DateObject;
+  category: RecordSummary;
+  manufacturer: RecordSummary;
+  notes: string;
+  expected_checkin: DateObject;
+  order_number: string;
+  companyName: string;
+  location: RecordSummary;
+  image: string;
+  status_label: {
+    id: number;
+    name: string;
+    status_type: string;
+    status_meta: string;
+  };
+  supplier: RecordSummary;
+  assigned_to: {
+    id: number;
+    username: string;
+    name: string;
+    last_name;
+    string;
+    email: string;
+    employee_number: string;
+    type: string;
+  };
+  created_at: DateObject;
+  updated_at: DateObject;
+  purchase_date: string;
+  eol: number;
+  purchase_cost: string;
+}
+
 export interface SnipeItUser {
   id: number;
   avatar: string;

@@ -9,23 +9,21 @@ import {
   RelationshipDirection,
 } from '@jupiterone/integration-sdk-core';
 
-import { HardwareAsset, SnipeItUser } from '../../collector';
+import { SnipeItHardware } from '../../collector';
 import { Entities, MappedRelationships } from '../constants';
 import { getLocationKey } from '../fetch-account/converter';
 
-export function getHardwareKey(id: string): string {
+export function getHardwareKey(id: number): string {
   return `hardware:${id}`;
 }
 
 export function convertHardware(
-  data: HardwareAsset,
-  user?: SnipeItUser,
+  data: SnipeItHardware,
 ): ReturnType<typeof createIntegrationEntity> {
   const hardwareId = data.id;
   const hardwareKey = getHardwareKey(hardwareId);
   const manufacturer = data.manufacturer?.name ?? null;
   const displayName = data.name || data.serial;
-
   return createIntegrationEntity({
     entityData: {
       source: data,
@@ -38,10 +36,8 @@ export function convertHardware(
         assetId: hardwareId,
         deviceId: String(hardwareId),
         displayName,
-        activatedOn: parseTimePropertyValue(data.activated_on),
-        username: user?.username || data.assigned_to?.username,
-        userId: user?.id || data.assigned_to?.id,
-        email: user?.email,
+        username: data.assigned_to?.username,
+        userId: data.assigned_to?.id,
         assetTag: data.asset_tag,
         category: data.category?.name ?? null,
         manufacturer,

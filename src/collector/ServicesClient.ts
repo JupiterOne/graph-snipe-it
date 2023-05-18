@@ -14,6 +14,7 @@ import {
   SnipeItConsumable,
   ConsumableUser,
   Location,
+  SnipeItHardware,
 } from './types';
 import { IntegrationProviderAPIError } from '@jupiterone/integration-sdk-core';
 
@@ -73,6 +74,10 @@ export class ServicesClient {
 
   listUsers() {
     return this.iterateAll<SnipeItUser>('users');
+  }
+
+  listHardware() {
+    return this.iterateAll<SnipeItHardware>('hardware');
   }
 
   listConsumableUsers(consumableId: string) {

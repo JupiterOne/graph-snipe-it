@@ -81,6 +81,7 @@ The following entities are created:
 | ---------- | ------------------------------ | --------------- |
 | Account    | `snipeit_account`              | `Account`       |
 | Consumable | `snipeit_consumable_resource`  | `Resource`      |
+| Hardware   | `snipeit_hardware`             | `Device`        |
 | License    | `snipeit_licensed_application` | `Application`   |
 | Location   | `location`                     | `Site`          |
 | Service    | `snipeit_service`              | `Service`       |
@@ -105,9 +106,10 @@ The following mapped relationships are created:
 
 | Source Entity `_type`          | Relationship `_class` | Target Entity `_type` | Direction |
 | ------------------------------ | --------------------- | --------------------- | --------- |
-| `location`                     | **HAS**               | `*hardware*`          | FORWARD   |
-| `snipeit_account`              | **MANAGES**           | `*hardware*`          | FORWARD   |
-| `snipeit_licensed_application` | **INSTALLED**         | `*hardware*`          | REVERSE   |
+| `location`                     | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
+| `snipeit_account`              | **MANAGES**           | `*snipeit_hardware*`  | FORWARD   |
+| `snipeit_licensed_application` | **INSTALLED**         | `*snipeit_hardware*`  | REVERSE   |
+| `snipeit_user`                 | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
 | `snipeit_user`                 | **IS**                | `*person*`            | FORWARD   |
 
 <!--

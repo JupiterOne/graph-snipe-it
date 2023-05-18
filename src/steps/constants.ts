@@ -47,7 +47,7 @@ export const Entities: Record<
   },
   HARDWARE: {
     resourceName: 'Hardware',
-    _type: 'hardware',
+    _type: 'snipeit_hardware',
     _class: ['Device'],
   },
   CONSUMABLE: {
@@ -123,7 +123,8 @@ export const MappedRelationships: Record<
   | 'ACCOUNT_MANAGES_HARDWARE'
   | 'LOCATION_HAS_HARDWARE'
   | 'LICENSE_INSTALLED_HARDWARE'
-  | 'USER_IS_PERSON',
+  | 'USER_IS_PERSON'
+  | 'USER_HAS_HARDWARE',
   StepMappedRelationshipMetadata
 > = {
   ACCOUNT_MANAGES_HARDWARE: {
@@ -152,6 +153,13 @@ export const MappedRelationships: Record<
     sourceType: Entities.USER._type,
     _class: RelationshipClass.IS,
     targetType: Entities.PERSON._type,
+    direction: RelationshipDirection.FORWARD,
+  },
+  USER_HAS_HARDWARE: {
+    _type: 'snipeit_user_has_hardware',
+    sourceType: Entities.USER._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.HARDWARE._type,
     direction: RelationshipDirection.FORWARD,
   },
 };

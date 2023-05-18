@@ -68,7 +68,7 @@ export function createLicenseHardwareMappedRelationship(
   hardwareId: number,
 ): MappedRelationship {
   return createMappedRelationship({
-    _key: `${license._key}|installed|${getHardwareKey(hardwareId.toString())}`,
+    _key: `${license._key}|installed|${getHardwareKey(hardwareId)}`,
     _class: MappedRelationships.LICENSE_INSTALLED_HARDWARE._class,
     _type: MappedRelationships.LICENSE_INSTALLED_HARDWARE._type,
     _mapping: {
@@ -77,7 +77,7 @@ export function createLicenseHardwareMappedRelationship(
       targetFilterKeys: [['_class', '_key']],
       targetEntity: {
         _class: Entities.HARDWARE._class,
-        _key: getHardwareKey(hardwareId.toString()),
+        _key: getHardwareKey(hardwareId),
       },
       skipTargetCreation: true,
     },

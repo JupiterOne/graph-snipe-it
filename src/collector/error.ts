@@ -1,5 +1,4 @@
 import {
-  IntegrationError,
   IntegrationProviderAPIError,
   IntegrationProviderAuthenticationError,
   IntegrationProviderAuthorizationError,

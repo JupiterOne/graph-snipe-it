@@ -10,7 +10,7 @@ export default async function validateInvocation(
   context: IntegrationExecutionContext<IntegrationConfig>,
 ): Promise<void> {
   try {
-    const client = createServicesClient(context.instance);
+    const client = createServicesClient(context.instance, context.logger);
     await client.test();
   } catch (err) {
     throw new IntegrationProviderAuthenticationError({

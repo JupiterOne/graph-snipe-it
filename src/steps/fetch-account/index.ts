@@ -19,8 +19,9 @@ export const ACCOUNT_ENTITY_KEY = 'entity:account';
 export async function fetchAccount({
   instance,
   jobState,
+  logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
 
   const accountEntity = getAccountEntity(instance);
   await jobState.addEntity(accountEntity);

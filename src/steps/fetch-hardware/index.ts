@@ -14,29 +14,41 @@ import {
 import { IntegrationConfig } from '../../types';
 import { HARDWARE_IDS, MappedRelationships, Steps } from '../constants';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
+import { getLocationKey } from '../fetch-account/converter';
 
 export async function fetchHardwareAssets({
   logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
   const hardwareIds: number[] = [];
 
   await client.iterateHardware(async (device) => {
-    const assignedUser = device.assigned_to;
-    const username = assignedUser?.username || assignedUser;
-    const user = username ? await client.fetchUser(username) : undefined;
+    let assignedUser = device.assigned_to;
+
+    // Only query the user if we don't have assigned information in the
+    // device payload.
+    if (!assignedUser?.username || !assignedUser?.id || !assignedUser?.email) {
+      const username = assignedUser?.username || assignedUser;
+      assignedUser = username ? await client.fetchUser(username) : undefined;
+    }
 
     hardwareIds.push(device.id);
 
     // Do not add to graph directly, this is used as the target of a number of
     // mapped relationships
-    const targetEntity = convertHardware(device, user);
+    const targetEntity = convertHardware(device, assignedUser);
 
     const relationships: MappedRelationship[] = [];
-    if (accountEntity) {
+
+    // First check if the relationship already exists.  Otherwise we run the risk of throwing a
+    // duplicate key error if it's already been added.
+    if (
+      accountEntity &&
+      !jobState.hasKey(`${accountEntity._key}|manages|${targetEntity._key}`)
+    ) {
       if (targetEntity.macAddress) {
         relationships.push(
           mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
@@ -52,7 +64,14 @@ export async function fetchHardwareAssets({
       }
     }
 
-    if (targetEntity.locationId) {
+    if (
+      targetEntity.locationId &&
+      !jobState.hasKey(
+        `${getLocationKey(targetEntity.locationId as number)}|has|${
+          targetEntity._key
+        }`,
+      )
+    ) {
       relationships.push(mapHardwareLocationRelationship(targetEntity));
     }
 

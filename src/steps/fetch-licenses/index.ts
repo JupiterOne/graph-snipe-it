@@ -27,35 +27,43 @@ export async function fetchLicensedApplications({
   jobState,
   logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
   const hardwareIds = (await jobState.getData(HARDWARE_IDS)) as number[];
 
-  for (const hardwareId of hardwareIds) {
-    try {
-      await client.iterateHardwareLicenses(hardwareId, async (license) => {
-        const licenseEntity = await jobState.addEntity(convertLicense(license));
-        await jobState.addRelationship(
-          createDirectRelationship({
-            from: accountEntity,
-            to: licenseEntity,
-            _class: RelationshipClass.HAS,
-          }),
-        );
-        await jobState.addRelationship(
-          createLicenseHardwareMappedRelationship(licenseEntity, hardwareId),
-        );
-      });
-    } catch (err) {
-      if (err instanceof IntegrationProviderAPIError && err.status === 403) {
-        logger.info(
-          `Skipped step "${Steps.LICENSES}". The required permission was not provided to perform this step.`,
-        );
-        return;
+  if (hardwareIds) {
+    for (const hardwareId of hardwareIds) {
+      try {
+        await client.iterateHardwareLicenses(hardwareId, async (license) => {
+          const licenseEntity = await jobState.addEntity(
+            convertLicense(license),
+          );
+          await jobState.addRelationship(
+            createDirectRelationship({
+              from: accountEntity,
+              to: licenseEntity,
+              _class: RelationshipClass.HAS,
+            }),
+          );
+          await jobState.addRelationship(
+            createLicenseHardwareMappedRelationship(licenseEntity, hardwareId),
+          );
+        });
+      } catch (err) {
+        if (err instanceof IntegrationProviderAPIError && err.status === 403) {
+          logger.info(
+            `Skipped step "${Steps.LICENSES}". The required permission was not provided to perform this step.`,
+          );
+          return;
+        }
+        throw err;
       }
-      throw err;
     }
+  } else {
+    logger.info(
+      `Skipped step "${Steps.LICENSES}". Hardware information was unavailable to complete this step.`,
+    );
   }
 }
 

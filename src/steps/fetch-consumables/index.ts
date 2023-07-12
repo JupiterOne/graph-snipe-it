@@ -20,7 +20,7 @@ export async function fetchConsumableResources({
   jobState,
   logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
   let consumableResources: Awaited<
@@ -56,8 +56,9 @@ export async function fetchConsumableResources({
 export async function buildUserConsumableRelationships({
   instance,
   jobState,
+  logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
 
   await jobState.iterateEntities(
     { _type: Entities.CONSUMABLE._type },

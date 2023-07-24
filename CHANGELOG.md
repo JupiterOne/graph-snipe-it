@@ -1,3 +1,15 @@
+# v2.1.1 (Mon Jul 24 2023)
+
+#### 🐛 Bug Fix
+
+- DEVICE-107 - Add lastSeenOn and default name on Device entities [#48](https://github.com/JupiterOne/graph-snipe-it/pull/48) ([@mknoedel](https://github.com/mknoedel))
+
+#### Authors: 1
+
+- Michael Knoedel ([@mknoedel](https://github.com/mknoedel))
+
+---
+
 # v2.1.0 (Wed Jul 12 2023)
 
 #### 🚀 Enhancement

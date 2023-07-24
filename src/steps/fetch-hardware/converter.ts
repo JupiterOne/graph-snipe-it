@@ -24,7 +24,14 @@ export function convertHardware(
   const hardwareId = data.id;
   const hardwareKey = getHardwareKey(hardwareId);
   const manufacturer = data.manufacturer?.name ?? null;
-  const displayName = data.name || data.serial;
+  const deviceUsersName =
+    user?.first_name && user?.last_name
+      ? `${user.first_name} ${user.last_name}`
+      : user?.email || user?.username || 'Unknown User';
+  const displayName =
+    data.name ||
+    data.serial ||
+    `${deviceUsersName}'s ${data.model?.name || 'Device'}`;
 
   return createIntegrationEntity({
     entityData: {
@@ -37,6 +44,7 @@ export function convertHardware(
         id: hardwareKey,
         assetId: hardwareId,
         deviceId: String(hardwareId),
+        name: data.name,
         displayName,
         activatedOn: parseTimePropertyValue(data.activated_on),
         username: user?.username || data.assigned_to?.username,
@@ -61,6 +69,10 @@ export function convertHardware(
         locationId: data.location?.id,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
+        lastSeenOn: [
+          parseTimePropertyValue(data.last_checkout?.datetime),
+          parseTimePropertyValue(data.updated_at?.datetime),
+        ].sort()[0],
       },
     },
   });

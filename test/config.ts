@@ -20,6 +20,6 @@ export function buildStepTestConfig(stepId: string): StepTestConfig {
 }
 
 export const config: IntegrationConfig = {
-  hostname: process.env.HOSTNAME || 'hostname',
+  hostname: process.env.HOSTNAME || '127.0.0.1:8080',
   apiToken: process.env.API_TOKEN || 'apiToken',
 };

@@ -20,8 +20,9 @@ import {
 export async function fetchUsers({
   instance,
   jobState,
+  logger,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
   const users = await client.listUsers();

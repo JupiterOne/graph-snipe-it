@@ -1,7 +1,7 @@
 import nodeFetch, { Request } from 'node-fetch';
 import { URLSearchParams } from 'url';
 
-import { retry } from '@lifeomic/attempt';
+import { retry, sleep } from '@lifeomic/attempt';
 
 import { IntegrationConfig } from '../types';
 import { retryableRequestError } from './error';
@@ -15,7 +15,10 @@ import {
   Location,
   SnipeItHardware,
 } from './types';
-import { IntegrationProviderAPIError } from '@jupiterone/integration-sdk-core';
+import {
+  IntegrationLogger,
+  IntegrationProviderAPIError,
+} from '@jupiterone/integration-sdk-core';
 
 /**
  * Services Api
@@ -25,9 +28,13 @@ export class ServicesClient {
   readonly hostname: string;
   readonly apiToken: string;
 
-  constructor(config: IntegrationConfig) {
+  readonly logger: IntegrationLogger;
+
+  constructor(config: IntegrationConfig, logger: IntegrationLogger) {
     this.hostname = config.hostname.toLowerCase().replace(/^https?:\/\//, '');
     this.apiToken = config.apiToken;
+
+    this.logger = logger;
   }
 
   test(): Promise<object[]> {
@@ -121,16 +128,17 @@ export class ServicesClient {
     return retry(
       async () => {
         const qs = new URLSearchParams(queryParams).toString();
-        const response = await nodeFetch(
-          `http://${this.hostname}/api/v1/${url}${qs ? '?' + qs : ''}`,
-          {
-            ...request,
-            headers: {
-              Authorization: `Bearer ${this.apiToken}`,
-              ...request?.headers,
-            },
+        const requestUrl = `https://${this.hostname}/api/v1/${url}${
+          qs ? '?' + qs : ''
+        }`;
+
+        const response = await nodeFetch(requestUrl, {
+          ...request,
+          headers: {
+            Authorization: `Bearer ${this.apiToken}`,
+            ...request?.headers,
           },
-        );
+        });
 
         /**
          * We are working with a json api, so just return the parsed data.
@@ -140,7 +148,7 @@ export class ServicesClient {
         }
 
         if (isRetryableRequest(response)) {
-          throw retryableRequestError(response);
+          throw retryableRequestError(response, requestUrl);
         } else {
           throw new IntegrationProviderAPIError({
             code: 'SnipeItClientApiError',
@@ -155,10 +163,18 @@ export class ServicesClient {
         delay: 200,
         factor: 2,
         jitter: true,
-        handleError: (err, context) => {
+        handleError: async (err, context) => {
           if (!err.retryable) {
             // can't retry this? just abort
             context.abort();
+          }
+          if (err.status === 429) {
+            const retryAfter = err.retryAfter ? err.retryAfter * 1000 : 5000;
+            this.logger.info(
+              { retryAfter },
+              `Received a rate limit error.  Waiting before retrying.`,
+            );
+            await sleep(retryAfter);
           }
         },
       },

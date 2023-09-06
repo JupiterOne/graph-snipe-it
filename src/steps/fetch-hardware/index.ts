@@ -17,12 +17,14 @@ import {
 } from '../constants';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { getUserKey } from '../fetch-users/converter';
+import { getLocationKey } from '../fetch-account/converter';
 
 export async function fetchHardwareAssets({
+  logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
-  const client = createServicesClient(instance);
+  const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
   await client.iterateHardware(async (hardware) => {
@@ -34,8 +36,21 @@ export async function fetchHardwareAssets({
       from: accountEntity,
       to: hardwareEntity,
     });
-    await jobState.addRelationship(accountHardwareRelationship);
-    if (hardwareEntity.locationId) {
+    if (
+      accountEntity &&
+      !jobState.hasKey(`${accountEntity._key}|manages|${hardwareEntity._key}`)
+    ) {
+      await jobState.addRelationship(accountHardwareRelationship);
+    }
+
+    if (
+      hardwareEntity.locationId &&
+      !jobState.hasKey(
+        `${getLocationKey(hardwareEntity.locationId as number)}|has|${
+          hardwareEntity._key
+        }`,
+      )
+    ) {
       await jobState.addRelationship(
         mapHardwareLocationRelationship(hardwareEntity),
       );

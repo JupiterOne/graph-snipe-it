@@ -1,4 +1,7 @@
-import { IntegrationInstance } from '@jupiterone/integration-sdk-core';
+import {
+  IntegrationInstance,
+  IntegrationLogger,
+} from '@jupiterone/integration-sdk-core';
 import { ServicesClient } from './ServicesClient';
 import { IntegrationConfig } from '../types';
 
@@ -10,6 +13,7 @@ export * from './types';
  */
 export function createServicesClient(
   instance: IntegrationInstance<IntegrationConfig>,
+  logger: IntegrationLogger,
 ): ServicesClient {
   const { hostname, apiToken } = instance.config;
 
@@ -19,5 +23,5 @@ export function createServicesClient(
     );
   }
 
-  return new ServicesClient({ hostname, apiToken });
+  return new ServicesClient({ hostname, apiToken }, logger);
 }

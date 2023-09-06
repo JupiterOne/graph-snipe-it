@@ -165,7 +165,6 @@ and this project adheres to
 | Consumable | `snipeit_consumable_resource`  | `Resource`      |
 | License    | `snipeit_licensed_application` | `Application`   |
 | User       | `snipeit_user`                 | `User`          |
-| Hardware   | `snipeit_hardware`             | `Device`        |
 
 ### Relationships
 
@@ -175,7 +174,6 @@ and this project adheres to
 | `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
 | `snipeit_account`     | **HAS**               | `snipeit_user`                 |
 | `snipeit_user`        | **USES**              | `snipeit_consumable_resource`  |
-| `snipeit_user`        | **HAS**               | `snipeit_hardware`             |
 
 ### Mapped Relationships
 

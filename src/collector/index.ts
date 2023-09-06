@@ -3,7 +3,7 @@ import {
   IntegrationLogger,
 } from '@jupiterone/integration-sdk-core';
 import { ServicesClient } from './ServicesClient';
-import { IntegrationConfig } from '../types';
+import { IntegrationConfig } from '../instanceConfigFields';
 
 export * from './types';
 

@@ -8,7 +8,6 @@ import {
 
 import { createServicesClient } from '../../collector';
 import { convertUser, createUserPersonMappedRelationship } from './converter';
-import { IntegrationConfig } from '../../types';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import {
   Entities,
@@ -16,6 +15,7 @@ import {
   Relationships,
   Steps,
 } from '../constants';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export async function fetchUsers({
   instance,

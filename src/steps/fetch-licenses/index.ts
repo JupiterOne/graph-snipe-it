@@ -9,9 +9,9 @@ import {
 
 import { createServicesClient } from '../../collector';
 import { convertLicense } from './converter';
-import { IntegrationConfig } from '../../types';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { Entities, Relationships, Steps } from '../constants';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export async function fetchLicensedApplications({
   instance,

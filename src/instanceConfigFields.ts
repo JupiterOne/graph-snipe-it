@@ -1,5 +1,12 @@
-import { IntegrationInstanceConfigFieldMap } from '@jupiterone/integration-sdk-core';
-import { IntegrationConfig } from './types';
+import {
+  IntegrationInstanceConfig,
+  IntegrationInstanceConfigFieldMap,
+} from '@jupiterone/integration-sdk-core';
+
+export interface IntegrationConfig extends IntegrationInstanceConfig {
+  hostname: string;
+  apiToken: string;
+}
 
 export const instanceConfigFields: IntegrationInstanceConfigFieldMap<IntegrationConfig> = {
   hostname: {

@@ -9,11 +9,11 @@ import {
 import * as cheerio from 'cheerio';
 import { createServicesClient } from '../../collector';
 import { convertConsumable } from './converter';
-import { IntegrationConfig } from '../../types';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { Steps, Entities, Relationships } from '../constants';
 import { getUserKey } from '../fetch-users/converter';
 import { ServicesClient } from '../../collector/ServicesClient';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export async function fetchConsumableResources({
   instance,

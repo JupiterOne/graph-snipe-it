@@ -11,8 +11,8 @@ import {
   getAccountEntity,
   getServiceEntity,
 } from './converter';
-import { IntegrationConfig } from '../../types';
 import { Steps, Entities, Relationships } from './../constants';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export const ACCOUNT_ENTITY_KEY = 'entity:account';
 

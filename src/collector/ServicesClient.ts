@@ -3,7 +3,6 @@ import { URLSearchParams } from 'url';
 
 import { retry, sleep } from '@lifeomic/attempt';
 
-import { IntegrationConfig } from '../types';
 import { retryableRequestError } from './error';
 import {
   PaginatedResponse,
@@ -19,6 +18,7 @@ import {
   IntegrationLogger,
   IntegrationProviderAPIError,
 } from '@jupiterone/integration-sdk-core';
+import { IntegrationConfig } from '../instanceConfigFields';
 
 /**
  * Services Api

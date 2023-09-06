@@ -8,7 +8,6 @@ import {
 
 import { createServicesClient } from '../../collector';
 import { convertHardware, mapHardwareLocationRelationship } from './converter';
-import { IntegrationConfig } from '../../types';
 import {
   Entities,
   MappedRelationships,
@@ -18,6 +17,7 @@ import {
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import { getUserKey } from '../fetch-users/converter';
 import { getLocationKey } from '../fetch-account/converter';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export async function fetchHardwareAssets({
   logger,
@@ -87,7 +87,7 @@ export const hardwareSteps: IntegrationStep<IntegrationConfig>[] = [
       Relationships.USER_HAS_HARDWARE,
     ],
     mappedRelationships: [MappedRelationships.LOCATION_HAS_HARDWARE],
-    dependsOn: [Steps.ACCOUNT],
+    dependsOn: [Steps.ACCOUNT, Steps.USERS],
     executionHandler: fetchHardwareAssets,
   },
 ];

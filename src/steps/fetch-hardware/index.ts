@@ -4,7 +4,6 @@ import {
   IntegrationStep,
   IntegrationStepExecutionContext,
   RelationshipClass,
-  MappedRelationship,
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
@@ -12,94 +11,67 @@ import { convertHardware, mapHardwareLocationRelationship } from './converter';
 import { IntegrationConfig } from '../../types';
 import {
   Entities,
-  HARDWARE_IDS,
   MappedRelationships,
+  Relationships,
   Steps,
 } from '../constants';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
+import { getUserKey } from '../fetch-users/converter';
 
 export async function fetchHardwareAssets({
-  logger,
   instance,
   jobState,
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const client = createServicesClient(instance);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
-  const hardware = await client.listHardware();
-  const hardwareEntities = hardware.map(convertHardware);
-  const relationships: MappedRelationship[] = [];
-  await jobState.addEntities(hardwareEntities);
+  await client.iterateHardware(async (hardware) => {
+    const hardwareEntity = convertHardware(hardware);
+    await jobState.addEntity(hardwareEntity);
 
-  hardwareEntities.map(async (hardwareEntity) => {
-    await jobState.addRelationships([
-      createDirectRelationship({
-        from: accountEntity,
-        to: hardwareEntity,
-        _class: RelationshipClass.MANAGES,
-      }),
-    ]);
+    const accountHardwareRelationship = createDirectRelationship({
+      _class: RelationshipClass.MANAGES,
+      from: accountEntity,
+      to: hardwareEntity,
+    });
+    await jobState.addRelationship(accountHardwareRelationship);
     if (hardwareEntity.locationId) {
-      relationships.push(mapHardwareLocationRelationship(hardwareEntity));
+      await jobState.addRelationship(
+        mapHardwareLocationRelationship(hardwareEntity),
+      );
     }
-    if (hardwareEntity.userId) {
-      const id = hardwareEntity.userId;
-      const userEntity: Entity = (await jobState.findEntity(
-        `snipeit_user:${id}`,
-      )) as Entity;
-      if (userEntity) {
+    if (hardware.assigned_to) {
+      const userId =
+        hardware.assigned_to.type === 'user' ? hardware.assigned_to.id : null;
+      if (!userId) {
+        return;
+      }
+      const userKey = getUserKey(String(userId));
+      if (jobState.hasKey(userKey)) {
         await jobState.addRelationship(
           createDirectRelationship({
             _class: RelationshipClass.HAS,
-            from: userEntity,
-            to: hardwareEntity,
+            fromKey: userKey,
+            fromType: Entities.USER._type,
+            toKey: hardwareEntity._key,
+            toType: Entities.HARDWARE._type,
           }),
         );
       }
     }
   });
-  if (relationships.length !== 0) {
-    await jobState.addRelationships(relationships);
-  }
-  const hardwareIds = hardware.map((hw) => hw.id);
-  await jobState.setData(HARDWARE_IDS, hardwareIds);
 }
 
 export const hardwareSteps: IntegrationStep<IntegrationConfig>[] = [
   {
     id: Steps.HARDWARE,
     name: 'Fetch Snipe-IT listing of hardware assets',
-    entities: [
-      {
-        _class: Entities.HARDWARE._class,
-        _type: Entities.HARDWARE._type,
-        resourceName: Entities.HARDWARE.resourceName,
-      },
+    entities: [Entities.HARDWARE],
+    relationships: [
+      Relationships.ACCOUNT_MANAGES_HARDWARE,
+      Relationships.USER_HAS_HARDWARE,
     ],
-    relationships: [],
-    mappedRelationships: [
-      {
-        _class: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._class,
-        _type: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._type,
-        sourceType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.sourceType,
-        targetType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.targetType,
-        direction: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.direction,
-      },
-      {
-        _class: MappedRelationships.LOCATION_HAS_HARDWARE._class,
-        _type: MappedRelationships.LOCATION_HAS_HARDWARE._type,
-        sourceType: MappedRelationships.LOCATION_HAS_HARDWARE.sourceType,
-        targetType: MappedRelationships.LOCATION_HAS_HARDWARE.targetType,
-        direction: MappedRelationships.LOCATION_HAS_HARDWARE.direction,
-      },
-      {
-        _class: MappedRelationships.USER_HAS_HARDWARE._class,
-        _type: MappedRelationships.USER_HAS_HARDWARE._type,
-        sourceType: MappedRelationships.USER_HAS_HARDWARE.sourceType,
-        targetType: MappedRelationships.USER_HAS_HARDWARE.targetType,
-        direction: MappedRelationships.USER_HAS_HARDWARE.direction,
-      },
-    ],
+    mappedRelationships: [MappedRelationships.LOCATION_HAS_HARDWARE],
     dependsOn: [Steps.ACCOUNT],
     executionHandler: fetchHardwareAssets,
   },

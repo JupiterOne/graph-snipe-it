@@ -97,21 +97,8 @@ export const consumablesSteps: IntegrationStep<IntegrationConfig>[] = [
   {
     id: Steps.CONSUMABLES,
     name: 'Fetch Snipe-IT listing of consumable resources',
-    entities: [
-      {
-        _class: Entities.CONSUMABLE._class,
-        _type: Entities.CONSUMABLE._type,
-        resourceName: Entities.CONSUMABLE.resourceName,
-      },
-    ],
-    relationships: [
-      {
-        _class: Relationships.ACCOUNT_HAS_CONSUMABLE._class,
-        _type: Relationships.ACCOUNT_HAS_CONSUMABLE._type,
-        sourceType: Relationships.ACCOUNT_HAS_CONSUMABLE.sourceType,
-        targetType: Relationships.ACCOUNT_HAS_CONSUMABLE.targetType,
-      },
-    ],
+    entities: [Entities.CONSUMABLE],
+    relationships: [Relationships.ACCOUNT_HAS_CONSUMABLE],
     dependsOn: [Steps.ACCOUNT],
     executionHandler: fetchConsumableResources,
   },
@@ -119,14 +106,7 @@ export const consumablesSteps: IntegrationStep<IntegrationConfig>[] = [
     id: Steps.BUILD_USER_CONSUMABLES_RELATIONSHIPS,
     name: 'Build relationship between Snipe-IT users and consumables',
     entities: [],
-    relationships: [
-      {
-        _class: Relationships.USER_USES_CONSUMABLE._class,
-        _type: Relationships.USER_USES_CONSUMABLE._type,
-        sourceType: Relationships.USER_USES_CONSUMABLE.sourceType,
-        targetType: Relationships.USER_USES_CONSUMABLE.targetType,
-      },
-    ],
+    relationships: [Relationships.USER_USES_CONSUMABLE],
     dependsOn: [Steps.USERS, Steps.CONSUMABLES],
     executionHandler: buildUserConsumableRelationships,
   },

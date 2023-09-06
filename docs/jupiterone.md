@@ -96,21 +96,21 @@ The following relationships are created:
 | `snipeit_account`     | **HAS**               | `snipeit_consumable_resource`  |
 | `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
 | `snipeit_account`     | **HAS**               | `snipeit_user`                 |
+| `snipeit_account`     | **MANAGES**           | `snipeit_hardware`             |
 | `snipeit_account`     | **MANAGES**           | `location`                     |
 | `snipeit_account`     | **PROVIDES**          | `snipeit_service`              |
+| `snipeit_hardware`    | **INSTALLED**         | `snipeit_licensed_application` |
+| `snipeit_user`        | **HAS**               | `snipeit_hardware`             |
 | `snipeit_user`        | **USES**              | `snipeit_consumable_resource`  |
 
 ### Mapped Relationships
 
 The following mapped relationships are created:
 
-| Source Entity `_type`          | Relationship `_class` | Target Entity `_type` | Direction |
-| ------------------------------ | --------------------- | --------------------- | --------- |
-| `location`                     | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
-| `snipeit_account`              | **MANAGES**           | `*snipeit_hardware*`  | FORWARD   |
-| `snipeit_licensed_application` | **INSTALLED**         | `*snipeit_hardware*`  | REVERSE   |
-| `snipeit_user`                 | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
-| `snipeit_user`                 | **IS**                | `*person*`            | FORWARD   |
+| Source Entity `_type` | Relationship `_class` | Target Entity `_type` | Direction |
+| --------------------- | --------------------- | --------------------- | --------- |
+| `location`            | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
+| `snipeit_user`        | **IS**                | `*person*`            | FORWARD   |
 
 <!--
 ********************************************************************************

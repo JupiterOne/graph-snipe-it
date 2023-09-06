@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Opaque } from 'type-fest';
 export interface PaginationInput {
   limit: string;
   offset: string;
@@ -11,8 +9,6 @@ export interface PaginatedResponse<T> {
 }
 
 export type ResourceIteratee<T> = (each: T) => Promise<void> | void;
-
-export type HardwareAsset = Opaque<any, 'HardwareAsset'>;
 
 export type ConsumableUser = {
   name: string;
@@ -83,6 +79,7 @@ export interface SnipeItHardware {
   name: string;
   asset_tag: string;
   serial: string;
+  byod: boolean;
   model: RecordSummary;
   model_number: string;
   last_checkout: DateObject;
@@ -103,13 +100,13 @@ export interface SnipeItHardware {
   supplier: RecordSummary;
   assigned_to: {
     id: number;
-    username: string;
     name: string;
-    last_name;
-    string;
-    email: string;
-    employee_number: string;
-    type: string;
+    type: 'user' | 'asset' | 'location';
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    employee_number?: string;
   };
   created_at: DateObject;
   updated_at: DateObject;

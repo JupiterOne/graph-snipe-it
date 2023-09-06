@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  convertProperties,
   createIntegrationEntity,
   createMappedRelationship,
   Entity,
@@ -14,7 +12,7 @@ import { Entities, MappedRelationships } from '../constants';
 import { getLocationKey } from '../fetch-account/converter';
 
 export function getHardwareKey(id: number): string {
-  return `hardware:${id}`;
+  return `snipeit_hardware:${id}`;
 }
 
 export function convertHardware(
@@ -28,22 +26,21 @@ export function convertHardware(
     entityData: {
       source: data,
       assign: {
-        ...convertProperties(data),
         _key: hardwareKey,
         _type: Entities.HARDWARE._type,
         _class: Entities.HARDWARE._class,
-        id: hardwareKey,
-        assetId: hardwareId,
+        id: String(hardwareId),
         deviceId: String(hardwareId),
         displayName,
-        username: data.assigned_to?.username,
-        userId: data.assigned_to?.id,
+        assignedType: data.assigned_to?.type,
+        assignedName: data.assigned_to?.name,
         assetTag: data.asset_tag,
         category: data.category?.name ?? null,
-        manufacturer,
         make: manufacturer,
         model: data.model?.name ?? null,
         serial: data.serial,
+        byod: data.byod,
+        cost: Number(data.purchase_cost),
         supplier: data.supplier?.name,
         EOL: !!data.eol,
         status:
@@ -57,29 +54,6 @@ export function convertHardware(
         locationId: data.location?.id,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
-      },
-    },
-  });
-}
-
-export function mapHardwareRelationship(
-  account: Entity,
-  hardware: Entity,
-  filterKey: string,
-): MappedRelationship {
-  return createMappedRelationship({
-    _key: `${account._key}|manages|${hardware._key}`,
-    _class: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._class,
-    _type: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._type,
-    _mapping: {
-      relationshipDirection: RelationshipDirection.FORWARD,
-      sourceEntityKey: account._key,
-      targetFilterKeys: [['_class', filterKey]],
-      targetEntity: {
-        ...convertProperties(hardware),
-        _key: hardware._key,
-        _type: hardware._type,
-        _class: hardware._class,
       },
     },
   });
@@ -99,8 +73,6 @@ export function mapHardwareLocationRelationship(
       sourceEntityKey: getLocationKey(hardware.locationId as number),
       targetFilterKeys: [['_class', 'id', 'locationId']],
       targetEntity: {
-        // not sure if it was inteded, but previously,
-        // _class was a string, not an array.
         _class: Entities.HARDWARE._class,
         id: hardware.id,
         locationId: hardware.locationId as number,

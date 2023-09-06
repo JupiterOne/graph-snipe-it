@@ -8,16 +8,6 @@ and this project adheres to
 
 ## [Unreleased]
 
-## 2.1.0 - 2023-05-18
-
-### Fixed
-
-- Ingested Hardware data
-
-### Added
-
-- Mapped relationship between user and hardware
-
 ## 2.0.3 - 2023-03-15
 
 ### Fixed

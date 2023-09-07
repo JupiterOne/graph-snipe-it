@@ -1,3 +1,16 @@
+# v3.0.0 (Thu Sep 07 2023)
+
+#### 💥 Breaking Change
+
+- INT-8131 - pull in assets hardware [#46](https://github.com/JupiterOne/graph-snipe-it/pull/46) ([@chrichts](https://github.com/chrichts) ronald.arias@contractor.jupiterone.com)
+
+#### Authors: 2
+
+- Chad Richts ([@chrichts](https://github.com/chrichts))
+- Ronald Arias (ronald.arias@contractor.jupiterone.com)
+
+---
+
 # v2.1.1 (Mon Jul 24 2023)
 
 #### 🐛 Bug Fix

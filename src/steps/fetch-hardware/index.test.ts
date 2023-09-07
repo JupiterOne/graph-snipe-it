@@ -1,81 +1,42 @@
-import { Recording, setupRecording } from '@jupiterone/integration-sdk-testing';
+import {
+  Recording,
+  executeStepWithDependencies,
+} from '@jupiterone/integration-sdk-testing';
 
-import { createStepContext } from '../../../test';
-import { fetchHardwareAssets } from './index';
-import { fetchAccount } from '../fetch-account';
+import { setupSnipeItRecording } from '../../../test/recording';
+import { buildStepTestConfig } from '../../../test/config';
+import { Entities, Steps } from '../constants';
 
 let recording: Recording;
 
 afterEach(async () => {
-  await recording.stop();
+  if (recording) {
+    await recording.stop();
+  }
 });
 
-test('fetchHardwareAssets', async () => {
-  recording = setupRecording({
-    name: 'fetchHardwareAssets',
-    directory: __dirname,
-    options: {
-      recordFailedRequests: false,
-      matchRequestsBy: {
-        url: {
-          protocol: false,
-          query: false,
+describe('fetch-hardware', () => {
+  test('success', async () => {
+    recording = setupSnipeItRecording({
+      name: 'fetch-hardware',
+      directory: __dirname,
+      options: {
+        recordFailedRequests: false,
+        matchRequestsBy: {
+          url: {
+            protocol: false,
+            query: false,
+          },
         },
       },
-    },
+    });
+
+    const stepConfig = buildStepTestConfig(Steps.HARDWARE);
+    const stepResults = await executeStepWithDependencies(stepConfig);
+    const { collectedEntities, collectedRelationships } = stepResults;
+
+    expect(collectedEntities.length > 0);
+    expect(collectedEntities).toMatchGraphObjectSchema(Entities.HARDWARE);
+    expect(collectedRelationships.length > 0);
   });
-
-  const context = createStepContext();
-  await fetchAccount(context);
-  await fetchHardwareAssets(context);
-
-  expect(context.jobState.collectedRelationships).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'PROVIDES',
-        _type: 'snipeit_account_provides_service',
-        displayName: 'PROVIDES',
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'MANAGES',
-        _type: 'snipeit_account_manages_location',
-        displayName: 'MANAGES',
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'MANAGES',
-        _type: 'snipeit_account_manages_hardware',
-        _mapping: {
-          relationshipDirection: 'FORWARD',
-          sourceEntityKey: expect.any(String),
-          targetFilterKeys: [['_class', 'serial']],
-          targetEntity: expect.objectContaining({
-            _type: 'hardware',
-            _class: ['Device'],
-            id: expect.any(String),
-            displayName: expect.any(String),
-            createdOn: expect.any(Number),
-          }),
-        },
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'HAS',
-        _type: 'site_has_hardware',
-        _mapping: {
-          relationshipDirection: 'FORWARD',
-          sourceEntityKey: expect.any(String),
-          targetFilterKeys: [['_class', 'id', 'locationId']],
-          targetEntity: expect.objectContaining({
-            _class: ['Device'],
-            id: expect.any(String),
-            locationId: expect.any(Number),
-          }),
-          skipTargetCreation: true,
-        },
-      }),
-    ]),
-  );
 });

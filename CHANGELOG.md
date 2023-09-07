@@ -2,7 +2,9 @@
 
 #### 🐛 Bug Fix
 
-- DEVICE-107 - Add lastSeenOn and default name on Device entities [#48](https://github.com/JupiterOne/graph-snipe-it/pull/48) ([@mknoedel](https://github.com/mknoedel))
+- DEVICE-107 - Add lastSeenOn and default name on Device entities
+  [#48](https://github.com/JupiterOne/graph-snipe-it/pull/48)
+  ([@mknoedel](https://github.com/mknoedel))
 
 #### Authors: 1
 

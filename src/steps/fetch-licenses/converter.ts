@@ -1,14 +1,9 @@
 import {
   createIntegrationEntity,
   parseTimePropertyValue,
-  Entity,
-  MappedRelationship,
-  createMappedRelationship,
-  RelationshipDirection,
 } from '@jupiterone/integration-sdk-core';
 import { HardwareLicense } from '../../collector';
-import { Entities, MappedRelationships } from '../constants';
-import { getHardwareKey } from '../fetch-hardware/converter';
+import { Entities } from '../constants';
 
 export function getLicenseKey(id: string): string {
   return `snipeit_licensed_application:${id}`;
@@ -59,27 +54,6 @@ export function convertLicense(
         'availableActions.update': data.available_actions?.update,
         'availableActions.delete': data.available_actions?.delete,
       },
-    },
-  });
-}
-
-export function createLicenseHardwareMappedRelationship(
-  license: Entity,
-  hardwareId: number,
-): MappedRelationship {
-  return createMappedRelationship({
-    _key: `${license._key}|installed|${getHardwareKey(hardwareId.toString())}`,
-    _class: MappedRelationships.LICENSE_INSTALLED_HARDWARE._class,
-    _type: MappedRelationships.LICENSE_INSTALLED_HARDWARE._type,
-    _mapping: {
-      relationshipDirection: RelationshipDirection.REVERSE,
-      sourceEntityKey: license._key,
-      targetFilterKeys: [['_class', '_key']],
-      targetEntity: {
-        _class: Entities.HARDWARE._class,
-        _key: getHardwareKey(hardwareId.toString()),
-      },
-      skipTargetCreation: true,
     },
   });
 }

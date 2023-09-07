@@ -81,6 +81,7 @@ The following entities are created:
 | ---------- | ------------------------------ | --------------- |
 | Account    | `snipeit_account`              | `Account`       |
 | Consumable | `snipeit_consumable_resource`  | `Resource`      |
+| Hardware   | `snipeit_hardware`             | `Device`        |
 | License    | `snipeit_licensed_application` | `Application`   |
 | Location   | `location`                     | `Site`          |
 | Service    | `snipeit_service`              | `Service`       |
@@ -95,20 +96,21 @@ The following relationships are created:
 | `snipeit_account`     | **HAS**               | `snipeit_consumable_resource`  |
 | `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
 | `snipeit_account`     | **HAS**               | `snipeit_user`                 |
+| `snipeit_account`     | **MANAGES**           | `snipeit_hardware`             |
 | `snipeit_account`     | **MANAGES**           | `location`                     |
 | `snipeit_account`     | **PROVIDES**          | `snipeit_service`              |
+| `snipeit_hardware`    | **INSTALLED**         | `snipeit_licensed_application` |
+| `snipeit_user`        | **HAS**               | `snipeit_hardware`             |
 | `snipeit_user`        | **USES**              | `snipeit_consumable_resource`  |
 
 ### Mapped Relationships
 
 The following mapped relationships are created:
 
-| Source Entity `_type`          | Relationship `_class` | Target Entity `_type` | Direction |
-| ------------------------------ | --------------------- | --------------------- | --------- |
-| `location`                     | **HAS**               | `*hardware*`          | FORWARD   |
-| `snipeit_account`              | **MANAGES**           | `*hardware*`          | FORWARD   |
-| `snipeit_licensed_application` | **INSTALLED**         | `*hardware*`          | REVERSE   |
-| `snipeit_user`                 | **IS**                | `*person*`            | FORWARD   |
+| Source Entity `_type` | Relationship `_class` | Target Entity `_type` | Direction |
+| --------------------- | --------------------- | --------------------- | --------- |
+| `location`            | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
+| `snipeit_user`        | **IS**                | `*person*`            | FORWARD   |
 
 <!--
 ********************************************************************************

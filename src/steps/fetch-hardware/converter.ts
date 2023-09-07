@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  convertProperties,
   createIntegrationEntity,
   createMappedRelationship,
   Entity,
@@ -9,21 +7,21 @@ import {
   RelationshipDirection,
 } from '@jupiterone/integration-sdk-core';
 
-import { HardwareAsset, SnipeItUser } from '../../collector';
+import { SnipeItHardware } from '../../collector';
 import { Entities, MappedRelationships } from '../constants';
 import { getLocationKey } from '../fetch-account/converter';
 
-export function getHardwareKey(id: string): string {
-  return `hardware:${id}`;
+export function getHardwareKey(id: number): string {
+  return `snipeit_hardware:${id}`;
 }
 
 export function convertHardware(
-  data: HardwareAsset,
-  user?: SnipeItUser,
+  data: SnipeItHardware,
 ): ReturnType<typeof createIntegrationEntity> {
   const hardwareId = data.id;
   const hardwareKey = getHardwareKey(hardwareId);
   const manufacturer = data.manufacturer?.name ?? null;
+  const user = data.assigned_to?.type === 'user' ? data.assigned_to : undefined;
   const deviceUsersName =
     user?.first_name && user?.last_name
       ? `${user.first_name} ${user.last_name}`
@@ -37,25 +35,22 @@ export function convertHardware(
     entityData: {
       source: data,
       assign: {
-        ...convertProperties(data),
         _key: hardwareKey,
         _type: Entities.HARDWARE._type,
         _class: Entities.HARDWARE._class,
-        id: hardwareKey,
-        assetId: hardwareId,
+        id: String(hardwareId),
         deviceId: String(hardwareId),
         name: data.name,
         displayName,
-        activatedOn: parseTimePropertyValue(data.activated_on),
-        username: user?.username || data.assigned_to?.username,
-        userId: user?.id || data.assigned_to?.id,
-        email: user?.email,
+        assignedType: data.assigned_to?.type,
+        assignedName: data.assigned_to?.name,
         assetTag: data.asset_tag,
         category: data.category?.name ?? null,
-        manufacturer,
         make: manufacturer,
         model: data.model?.name ?? null,
         serial: data.serial,
+        byod: data.byod,
+        cost: Number(data.purchase_cost),
         supplier: data.supplier?.name,
         EOL: !!data.eol,
         status:
@@ -78,29 +73,6 @@ export function convertHardware(
   });
 }
 
-export function mapHardwareRelationship(
-  account: Entity,
-  hardware: Entity,
-  filterKey: string,
-): MappedRelationship {
-  return createMappedRelationship({
-    _key: `${account._key}|manages|${hardware._key}`,
-    _class: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._class,
-    _type: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._type,
-    _mapping: {
-      relationshipDirection: RelationshipDirection.FORWARD,
-      sourceEntityKey: account._key,
-      targetFilterKeys: [['_class', filterKey]],
-      targetEntity: {
-        ...convertProperties(hardware),
-        _key: hardware._key,
-        _type: hardware._type,
-        _class: hardware._class,
-      },
-    },
-  });
-}
-
 export function mapHardwareLocationRelationship(
   hardware: Entity,
 ): MappedRelationship {
@@ -115,8 +87,6 @@ export function mapHardwareLocationRelationship(
       sourceEntityKey: getLocationKey(hardware.locationId as number),
       targetFilterKeys: [['_class', 'id', 'locationId']],
       targetEntity: {
-        // not sure if it was inteded, but previously,
-        // _class was a string, not an array.
         _class: Entities.HARDWARE._class,
         id: hardware.id,
         locationId: hardware.locationId as number,

@@ -38,8 +38,8 @@ export function getServiceEntity(instance: any): Entity {
     name: 'Snipe-IT ITAM',
     displayName: 'Snipe-IT ITAM',
     description: 'IT Asset Management (ITAM)',
-    category: 'infrastructure',
-    function: 'ITAM',
+    category: ['infrastructure'],
+    function: ['ITAM'],
   };
 }
 

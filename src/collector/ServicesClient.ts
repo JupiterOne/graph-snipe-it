@@ -3,10 +3,8 @@ import { URLSearchParams } from 'url';
 
 import { retry, sleep } from '@lifeomic/attempt';
 
-import { IntegrationConfig } from '../types';
 import { retryableRequestError } from './error';
 import {
-  HardwareAsset,
   PaginatedResponse,
   SnipeItUser,
   ResourceIteratee,
@@ -14,11 +12,13 @@ import {
   SnipeItConsumable,
   ConsumableUser,
   Location,
+  SnipeItHardware,
 } from './types';
 import {
   IntegrationLogger,
   IntegrationProviderAPIError,
 } from '@jupiterone/integration-sdk-core';
+import { IntegrationConfig } from '../instanceConfigFields';
 
 /**
  * Services Api
@@ -51,44 +51,36 @@ export class ServicesClient {
     if (usersResponse.total > 0) return usersResponse.rows[0];
   }
 
-  async iterateHardware(iteratee: ResourceIteratee<HardwareAsset>) {
-    const hardwareAssets = await this.iterateAll<HardwareAsset>('hardware');
-    for (const hardware of hardwareAssets) {
-      await iteratee(hardware);
-    }
+  async iterateHardware(iteratee: ResourceIteratee<SnipeItHardware>) {
+    await this.iterateAll<SnipeItHardware>('hardware', iteratee);
   }
 
   listLocations() {
-    return this.iterateAll<Location>('locations');
+    return this.listAll<Location>('locations');
   }
 
   listConsumables() {
-    return this.iterateAll<SnipeItConsumable>('consumables');
+    return this.listAll<SnipeItConsumable>('consumables');
   }
 
   async iterateHardwareLicenses(
     id: number,
     iteratee: ResourceIteratee<HardwareLicense>,
   ) {
-    const licenses = await this.iterateAll<HardwareLicense>(
-      `hardware/${id}/licenses`,
-    );
-    for (const license of licenses) {
-      await iteratee(license);
-    }
+    await this.iterateAll<HardwareLicense>(`hardware/${id}/licenses`, iteratee);
   }
 
   listUsers() {
-    return this.iterateAll<SnipeItUser>('users');
+    return this.listAll<SnipeItUser>('users');
   }
 
   listConsumableUsers(consumableId: string) {
-    return this.iterateAll<ConsumableUser>(
+    return this.listAll<ConsumableUser>(
       `consumables/view/${consumableId}/users`,
     );
   }
 
-  async iterateAll<T = unknown>(url: string): Promise<T[]> {
+  async listAll<T = unknown>(url: string): Promise<T[]> {
     const data: T[] = [];
     const limit = 500;
     let offset = 0;
@@ -106,6 +98,26 @@ export class ServicesClient {
       data.push(...response.rows);
     } while (offset < total);
     return data;
+  }
+
+  async iterateAll<T = unknown>(url: string, iteratee: ResourceIteratee<T>) {
+    const limit = 500;
+    let offset = 0;
+    let total = 0;
+    do {
+      const response = await this.fetch<PaginatedResponse<T>>(url, {
+        offset: offset.toString(),
+        limit: limit.toString(),
+      });
+      if (!response.rows) {
+        break;
+      }
+      total = response.total;
+      offset += limit;
+      for (const row of response.rows) {
+        await iteratee(row);
+      }
+    } while (offset < total);
   }
 
   fetch<T = object>(

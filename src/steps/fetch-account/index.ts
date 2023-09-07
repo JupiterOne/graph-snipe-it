@@ -11,8 +11,8 @@ import {
   getAccountEntity,
   getServiceEntity,
 } from './converter';
-import { IntegrationConfig } from '../../types';
 import { Steps, Entities, Relationships } from './../constants';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export const ACCOUNT_ENTITY_KEY = 'entity:account';
 
@@ -55,36 +55,10 @@ export const accountSteps: IntegrationStep<IntegrationConfig>[] = [
   {
     id: Steps.ACCOUNT,
     name: 'Fetch Account related data',
-    entities: [
-      {
-        _class: Entities.ACCOUNT._class,
-        _type: Entities.ACCOUNT._type,
-        resourceName: Entities.ACCOUNT.resourceName,
-      },
-      {
-        _class: Entities.SERVICE._class,
-        _type: Entities.SERVICE._type,
-        resourceName: Entities.SERVICE.resourceName,
-      },
-      {
-        _class: Entities.LOCATION._class,
-        _type: Entities.LOCATION._type,
-        resourceName: Entities.LOCATION.resourceName,
-      },
-    ],
+    entities: [Entities.ACCOUNT, Entities.SERVICE, Entities.LOCATION],
     relationships: [
-      {
-        _class: Relationships.ACCOUNT_PROVIDES_SERVICE._class,
-        _type: Relationships.ACCOUNT_PROVIDES_SERVICE._type,
-        sourceType: Relationships.ACCOUNT_PROVIDES_SERVICE.sourceType,
-        targetType: Relationships.ACCOUNT_PROVIDES_SERVICE.targetType,
-      },
-      {
-        _class: Relationships.ACCOUNT_MANAGES_LOCATION._class,
-        _type: Relationships.ACCOUNT_MANAGES_LOCATION._type,
-        sourceType: Relationships.ACCOUNT_MANAGES_LOCATION.sourceType,
-        targetType: Relationships.ACCOUNT_MANAGES_LOCATION.targetType,
-      },
+      Relationships.ACCOUNT_PROVIDES_SERVICE,
+      Relationships.ACCOUNT_MANAGES_LOCATION,
     ],
     executionHandler: fetchAccount,
   },

@@ -4,7 +4,7 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from './collector';
-import { IntegrationConfig } from './types';
+import { IntegrationConfig } from './instanceConfigFields';
 
 export default async function validateInvocation(
   context: IntegrationExecutionContext<IntegrationConfig>,

@@ -1,20 +1,23 @@
 import {
   Entity,
+  createDirectRelationship,
   IntegrationStep,
   IntegrationStepExecutionContext,
-  MappedRelationship,
+  RelationshipClass,
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
+import { convertHardware, mapHardwareLocationRelationship } from './converter';
 import {
-  convertHardware,
-  mapHardwareLocationRelationship,
-  mapHardwareRelationship,
-} from './converter';
-import { IntegrationConfig } from '../../types';
-import { HARDWARE_IDS, MappedRelationships, Steps } from '../constants';
+  Entities,
+  MappedRelationships,
+  Relationships,
+  Steps,
+} from '../constants';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
+import { getUserKey } from '../fetch-users/converter';
 import { getLocationKey } from '../fetch-account/converter';
+import { IntegrationConfig } from '../../instanceConfigFields';
 
 export async function fetchHardwareAssets({
   logger,
@@ -23,94 +26,68 @@ export async function fetchHardwareAssets({
 }: IntegrationStepExecutionContext<IntegrationConfig>) {
   const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
-  const hardwareIds: number[] = [];
 
-  await client.iterateHardware(async (device) => {
-    let assignedUser = device.assigned_to;
+  await client.iterateHardware(async (hardware) => {
+    const hardwareEntity = convertHardware(hardware);
+    await jobState.addEntity(hardwareEntity);
 
-    // Only query the user if we don't have assigned information in the
-    // device payload.
-    if (!assignedUser?.username || !assignedUser?.id || !assignedUser?.email) {
-      const username = assignedUser?.username || assignedUser;
-      assignedUser = username ? await client.fetchUser(username) : undefined;
-    }
-
-    hardwareIds.push(device.id);
-
-    // Do not add to graph directly, this is used as the target of a number of
-    // mapped relationships
-    const targetEntity = convertHardware(device, assignedUser);
-
-    const relationships: MappedRelationship[] = [];
-
-    // First check if the relationship already exists.  Otherwise we run the risk of throwing a
-    // duplicate key error if it's already been added.
+    const accountHardwareRelationship = createDirectRelationship({
+      _class: RelationshipClass.MANAGES,
+      from: accountEntity,
+      to: hardwareEntity,
+    });
     if (
       accountEntity &&
-      !jobState.hasKey(`${accountEntity._key}|manages|${targetEntity._key}`)
+      !jobState.hasKey(`${accountEntity._key}|manages|${hardwareEntity._key}`)
     ) {
-      if (targetEntity.macAddress) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'macAddress'),
-        );
-      } else if (targetEntity.serial) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'serial'),
-        );
-      } else if (targetEntity.hardwareId) {
-        relationships.push(
-          mapHardwareRelationship(accountEntity, targetEntity, 'hardwareId'),
-        );
-      }
+      await jobState.addRelationship(accountHardwareRelationship);
     }
 
     if (
-      targetEntity.locationId &&
+      hardwareEntity.locationId &&
       !jobState.hasKey(
-        `${getLocationKey(targetEntity.locationId as number)}|has|${
-          targetEntity._key
+        `${getLocationKey(hardwareEntity.locationId as number)}|has|${
+          hardwareEntity._key
         }`,
       )
     ) {
-      relationships.push(mapHardwareLocationRelationship(targetEntity));
-    }
-
-    if (relationships.length !== 0) {
-      await jobState.addRelationships(relationships);
-    } else {
-      logger.warn(
-        { assetId: device.assetId, username: assignedUser?.username },
-        'Hardware asset has no supported identifier, mapped relationship not created',
+      await jobState.addRelationship(
+        mapHardwareLocationRelationship(hardwareEntity),
       );
     }
+    if (hardware.assigned_to) {
+      const userId =
+        hardware.assigned_to.type === 'user' ? hardware.assigned_to.id : null;
+      if (!userId) {
+        return;
+      }
+      const userKey = getUserKey(String(userId));
+      if (jobState.hasKey(userKey)) {
+        await jobState.addRelationship(
+          createDirectRelationship({
+            _class: RelationshipClass.HAS,
+            fromKey: userKey,
+            fromType: Entities.USER._type,
+            toKey: hardwareEntity._key,
+            toType: Entities.HARDWARE._type,
+          }),
+        );
+      }
+    }
   });
-
-  await jobState.setData(HARDWARE_IDS, hardwareIds);
 }
 
 export const hardwareSteps: IntegrationStep<IntegrationConfig>[] = [
   {
     id: Steps.HARDWARE,
     name: 'Fetch Snipe-IT listing of hardware assets',
-    entities: [],
-    relationships: [],
-    mappedRelationships: [
-      {
-        _class: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._class,
-        _type: MappedRelationships.ACCOUNT_MANAGES_HARDWARE._type,
-        sourceType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.sourceType,
-        targetType: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.targetType,
-        direction: MappedRelationships.ACCOUNT_MANAGES_HARDWARE.direction,
-      },
-      {
-        _class: MappedRelationships.LOCATION_HAS_HARDWARE._class,
-        _type: MappedRelationships.LOCATION_HAS_HARDWARE._type,
-        sourceType: MappedRelationships.LOCATION_HAS_HARDWARE.sourceType,
-        targetType: MappedRelationships.LOCATION_HAS_HARDWARE.targetType,
-        direction: MappedRelationships.LOCATION_HAS_HARDWARE.direction,
-      },
+    entities: [Entities.HARDWARE],
+    relationships: [
+      Relationships.ACCOUNT_MANAGES_HARDWARE,
+      Relationships.USER_HAS_HARDWARE,
     ],
-    dependsOn: [Steps.ACCOUNT],
+    mappedRelationships: [MappedRelationships.LOCATION_HAS_HARDWARE],
+    dependsOn: [Steps.ACCOUNT, Steps.USERS],
     executionHandler: fetchHardwareAssets,
   },
 ];

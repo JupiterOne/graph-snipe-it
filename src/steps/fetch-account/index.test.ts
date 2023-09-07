@@ -1,65 +1,38 @@
-import { createStepContext } from '../../../test';
-import { Recording, setupRecording } from '@jupiterone/integration-sdk-testing';
+import {
+  Recording,
+  executeStepWithDependencies,
+} from '@jupiterone/integration-sdk-testing';
 
-import { fetchAccount } from './index';
+import { setupSnipeItRecording } from '../../../test/recording';
+import { buildStepTestConfig } from '../../../test/config';
+import { Steps } from '../constants';
 
 let recording: Recording;
 
 afterEach(async () => {
-  await recording.stop();
+  if (recording) {
+    await recording.stop();
+  }
 });
 
-test('fetchAccount', async () => {
-  recording = setupRecording({
-    name: 'fetchAccount',
-    directory: __dirname,
-    options: {
-      recordFailedRequests: false,
-      matchRequestsBy: {
-        url: {
-          protocol: false,
-          query: false,
+describe('fetch-account', () => {
+  test('success', async () => {
+    recording = setupSnipeItRecording({
+      name: 'fetch-account',
+      directory: __dirname,
+      options: {
+        recordFailedRequests: false,
+        matchRequestsBy: {
+          url: {
+            protocol: false,
+            query: false,
+          },
         },
       },
-    },
+    });
+
+    const stepConfig = buildStepTestConfig(Steps.ACCOUNT);
+    const stepResults = await executeStepWithDependencies(stepConfig);
+    expect(stepResults).toMatchStepMetadata(stepConfig);
   });
-
-  const context = createStepContext();
-  await fetchAccount(context);
-
-  expect(context.jobState.collectedEntities).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: ['Account'],
-        _type: 'snipeit_account',
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: ['Service'],
-        _type: 'snipeit_service',
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: ['Site'],
-        _type: 'location',
-      }),
-    ]),
-  );
-  expect(context.jobState.collectedRelationships).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'PROVIDES',
-        _type: 'snipeit_account_provides_service',
-        displayName: 'PROVIDES',
-      }),
-      expect.objectContaining({
-        _key: expect.any(String),
-        _class: 'MANAGES',
-        _type: 'snipeit_account_manages_location',
-        displayName: 'MANAGES',
-      }),
-    ]),
-  );
 });

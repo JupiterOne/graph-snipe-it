@@ -7,7 +7,6 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 export const ACCOUNT_ENTITY_KEY = 'entity:account';
-export const HARDWARE_IDS = 'HARDWARE_IDS';
 
 export const Steps = {
   ACCOUNT: 'fetch-account',
@@ -47,7 +46,7 @@ export const Entities: Record<
   },
   HARDWARE: {
     resourceName: 'Hardware',
-    _type: 'hardware',
+    _type: 'snipeit_hardware',
     _class: ['Device'],
   },
   CONSUMABLE: {
@@ -78,7 +77,10 @@ export const Relationships: Record<
   | 'ACCOUNT_HAS_CONSUMABLE'
   | 'ACCOUNT_HAS_LICENSE'
   | 'ACCOUNT_HAS_USER'
-  | 'USER_USES_CONSUMABLE',
+  | 'USER_USES_CONSUMABLE'
+  | 'HARDWARE_INSTALLED_LICENSE'
+  | 'USER_HAS_HARDWARE'
+  | 'ACCOUNT_MANAGES_HARDWARE',
   StepRelationshipMetadata
 > = {
   ACCOUNT_PROVIDES_SERVICE: {
@@ -117,35 +119,36 @@ export const Relationships: Record<
     _class: RelationshipClass.USES,
     targetType: Entities.CONSUMABLE._type,
   },
-};
-
-export const MappedRelationships: Record<
-  | 'ACCOUNT_MANAGES_HARDWARE'
-  | 'LOCATION_HAS_HARDWARE'
-  | 'LICENSE_INSTALLED_HARDWARE'
-  | 'USER_IS_PERSON',
-  StepMappedRelationshipMetadata
-> = {
+  HARDWARE_INSTALLED_LICENSE: {
+    _type: 'snipeit_hardware_installed_licensed_application',
+    sourceType: Entities.HARDWARE._type,
+    _class: RelationshipClass.INSTALLED,
+    targetType: Entities.LICENSE._type,
+  },
+  USER_HAS_HARDWARE: {
+    _type: 'snipeit_user_has_hardware',
+    sourceType: Entities.USER._type,
+    _class: RelationshipClass.HAS,
+    targetType: Entities.HARDWARE._type,
+  },
   ACCOUNT_MANAGES_HARDWARE: {
     _type: 'snipeit_account_manages_hardware',
     sourceType: Entities.ACCOUNT._type,
     _class: RelationshipClass.MANAGES,
     targetType: Entities.HARDWARE._type,
-    direction: RelationshipDirection.FORWARD,
   },
+};
+
+export const MappedRelationships: Record<
+  'LOCATION_HAS_HARDWARE' | 'USER_IS_PERSON',
+  StepMappedRelationshipMetadata
+> = {
   LOCATION_HAS_HARDWARE: {
     _type: 'site_has_hardware',
     sourceType: Entities.LOCATION._type,
     _class: RelationshipClass.HAS,
     targetType: Entities.HARDWARE._type,
     direction: RelationshipDirection.FORWARD,
-  },
-  LICENSE_INSTALLED_HARDWARE: {
-    _type: 'snipeit_licensed_application_installed_hardware',
-    sourceType: Entities.LICENSE._type,
-    _class: RelationshipClass.INSTALLED,
-    targetType: Entities.HARDWARE._type,
-    direction: RelationshipDirection.REVERSE,
   },
   USER_IS_PERSON: {
     _type: 'snipeit_user_is_person',

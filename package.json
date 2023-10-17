@@ -2,6 +2,10 @@
   "name": "@jupiterone/graph-snipe-it",
   "version": "3.0.0",
   "description": "A graph conversion tool for https://snipeitapp.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JupiterOne/graph-snipe-it"
+  },
   "license": "MPL-2.0",
   "main": "src/index.js",
   "types": "src/index.d.ts",

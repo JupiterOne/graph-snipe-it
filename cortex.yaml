@@ -1,0 +1,12 @@
+openapi: 3.0.1
+info:
+  title: '@jupiterone/graph-snipe-it'
+  description: A graph conversion tool for https://snipeitapp.com/
+  x-cortex-git:
+    github:
+      repository: JupiterOne/graph-snipe-it
+  x-cortex-owners:
+    - type: group
+      name: JupiterOne/integrations
+  x-cortex-service-groups: tier-4
+  x-cortex-tag: '@jupiterone/graph-snipe-it'

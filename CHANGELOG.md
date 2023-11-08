@@ -1,3 +1,26 @@
+# v3.0.0 (Wed Nov 08 2023)
+
+#### 💥 Breaking Change
+
+- INT-8131 - pull in assets hardware [#46](https://github.com/JupiterOne/graph-snipe-it/pull/46) ([@chrichts](https://github.com/chrichts) [@RonaldEAM](https://github.com/RonaldEAM))
+
+#### 🚀 Enhancement
+
+- add company name to properties [#50](https://github.com/JupiterOne/graph-snipe-it/pull/50) ([@SeaBlooms](https://github.com/SeaBlooms))
+
+#### ⚠️ Pushed to `main`
+
+- Populate CODEOWENRS, baseline package.json and baseline cortex.yaml ([@jablonnc](https://github.com/jablonnc))
+
+#### Authors: 4
+
+- [@SeaBlooms](https://github.com/SeaBlooms)
+- Chad Richts ([@chrichts](https://github.com/chrichts))
+- Noah Jablonski ([@jablonnc](https://github.com/jablonnc))
+- Ronald Arias ([@RonaldEAM](https://github.com/RonaldEAM))
+
+---
+
 # v3.0.0 (Thu Sep 07 2023)
 
 #### 💥 Breaking Change

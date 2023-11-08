@@ -46,6 +46,7 @@ export function convertHardware(
         assignedName: data.assigned_to?.name,
         assetTag: data.asset_tag,
         category: data.category?.name ?? null,
+        company: data.company?.name ?? null,
         make: manufacturer,
         model: data.model?.name ?? null,
         serial: data.serial,

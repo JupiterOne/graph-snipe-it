@@ -88,7 +88,7 @@ export interface SnipeItHardware {
   notes: string;
   expected_checkin: DateObject;
   order_number: string;
-  companyName: string;
+  company: RecordSummary;
   location: RecordSummary;
   image: string;
   status_label: {

@@ -1,3 +1,15 @@
+# v4.1.0 (Mon Nov 20 2023)
+
+#### 🚀 Enhancement
+
+- Add statusMeta to snipeit_hardware [#49](https://github.com/JupiterOne/graph-snipe-it/pull/49) ([@i5o](https://github.com/i5o))
+
+#### Authors: 1
+
+- Ignacio Rodríguez ([@i5o](https://github.com/i5o))
+
+---
+
 # v3.0.0 (Wed Nov 08 2023)
 
 #### 💥 Breaking Change

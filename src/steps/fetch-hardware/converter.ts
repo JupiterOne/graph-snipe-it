@@ -70,6 +70,7 @@ export function convertHardware(
           parseTimePropertyValue(data.updated_at?.datetime),
         ].sort()[0],
         statusMeta: data.status_label.status_meta,
+        statusName: data.status_label.name,
       },
     },
   });

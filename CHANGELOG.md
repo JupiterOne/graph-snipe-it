@@ -1,3 +1,22 @@
+# v4.2.0 (Thu Jan 25 2024)
+
+#### 🚀 Enhancement
+
+- Add statusName to snipeit_hardware [#51](https://github.com/JupiterOne/graph-snipe-it/pull/51) ([@i5o](https://github.com/i5o))
+
+#### ⚠️ Pushed to `main`
+
+- Apply remove-codeql with multi-gitter [ci skip] ([@electricgull](https://github.com/electricgull))
+- Fix x-cortex-service-groups where tier-4 was set incorrectly ([@jablonnc](https://github.com/jablonnc))
+
+#### Authors: 3
+
+- Cameron Griffin ([@electricgull](https://github.com/electricgull))
+- Ignacio Rodríguez ([@i5o](https://github.com/i5o))
+- Noah Jablonski ([@jablonnc](https://github.com/jablonnc))
+
+---
+
 # v4.1.0 (Mon Nov 20 2023)
 
 #### 🚀 Enhancement

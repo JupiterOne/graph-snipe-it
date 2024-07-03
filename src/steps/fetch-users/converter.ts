@@ -1,13 +1,9 @@
 import {
   createIntegrationEntity,
   parseTimePropertyValue,
-  RelationshipDirection,
-  createMappedRelationship,
-  MappedRelationship,
-  Entity,
 } from '@jupiterone/integration-sdk-core';
 import { SnipeItUser } from '../../collector';
-import { Entities, MappedRelationships } from '../constants';
+import { Entities } from '../constants';
 
 export function getUserKey(id: string): string {
   return `snipeit_user:${id}`;
@@ -28,7 +24,7 @@ export function convertUser(
         _type: Entities.USER._type,
         _class: Entities.USER._class,
         id: getUserKey(String(data.id)),
-        userId: data.id,
+        userId: String(data.id),
         displayName: data.name,
         avatar: data.avatar,
         firstName: data.first_name,
@@ -197,29 +193,6 @@ export function convertUser(
         lastLogin: parseTimePropertyValue(data.last_login?.datetime),
         deletedAt: parseTimePropertyValue(data.deleted_at?.datetime),
       },
-    },
-  });
-}
-
-export function createUserPersonMappedRelationship(
-  user: Entity,
-): MappedRelationship {
-  return createMappedRelationship({
-    _key: `${user._key}|is|${user.username}`,
-    _class: MappedRelationships.USER_IS_PERSON._class,
-    _type: MappedRelationships.USER_IS_PERSON._type,
-    _mapping: {
-      relationshipDirection: RelationshipDirection.FORWARD,
-      sourceEntityKey: user._key,
-      targetFilterKeys: [['_class', 'username', 'email']],
-      targetEntity: {
-        _class: Entities.PERSON._class,
-        id: user.id,
-        userId: user.userId as number,
-        username: user.username as number,
-        email: user.userId as number,
-      },
-      skipTargetCreation: true,
     },
   });
 }

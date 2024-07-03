@@ -7,7 +7,7 @@ import {
 } from '@jupiterone/integration-sdk-core';
 
 import { createServicesClient } from '../../collector';
-import { convertUser, createUserPersonMappedRelationship } from './converter';
+import { convertUser } from './converter';
 import { ACCOUNT_ENTITY_KEY } from '../fetch-account';
 import {
   Entities,
@@ -30,14 +30,13 @@ export async function fetchUsers({
   await jobState.addEntities(userEntities);
 
   userEntities.map(async (userEntity) => {
-    await jobState.addRelationships([
+    await jobState.addRelationship(
       createDirectRelationship({
         from: accountEntity,
         to: userEntity,
         _class: RelationshipClass.HAS,
       }),
-      createUserPersonMappedRelationship(userEntity),
-    ]);
+    );
   });
 }
 

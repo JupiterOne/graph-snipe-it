@@ -93,15 +93,15 @@ The following relationships are created:
 
 | Source Entity `_type` | Relationship `_class` | Target Entity `_type`          |
 | --------------------- | --------------------- | ------------------------------ |
-| `snipeit_account`     | **HAS**               | `snipeit_consumable_resource`  |
-| `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
-| `snipeit_account`     | **HAS**               | `snipeit_user`                 |
-| `snipeit_account`     | **MANAGES**           | `snipeit_hardware`             |
 | `snipeit_account`     | **MANAGES**           | `location`                     |
+| `snipeit_account`     | **HAS**               | `snipeit_consumable_resource`  |
+| `snipeit_account`     | **MANAGES**           | `snipeit_hardware`             |
+| `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
 | `snipeit_account`     | **PROVIDES**          | `snipeit_service`              |
+| `snipeit_account`     | **HAS**               | `snipeit_user`                 |
 | `snipeit_hardware`    | **INSTALLED**         | `snipeit_licensed_application` |
-| `snipeit_user`        | **HAS**               | `snipeit_hardware`             |
 | `snipeit_user`        | **USES**              | `snipeit_consumable_resource`  |
+| `snipeit_user`        | **HAS**               | `snipeit_hardware`             |
 
 ### Mapped Relationships
 

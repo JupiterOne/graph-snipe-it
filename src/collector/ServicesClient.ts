@@ -63,6 +63,10 @@ export class ServicesClient {
     return this.listAll<SnipeItConsumable>('consumables');
   }
 
+  async iterateConsumables(iteratee: ResourceIteratee<SnipeItConsumable>) {
+    await this.iterateAll<SnipeItConsumable>('consumables', iteratee);
+  }
+
   async iterateHardwareLicenses(
     id: number,
     iteratee: ResourceIteratee<HardwareLicense>,
@@ -70,13 +74,17 @@ export class ServicesClient {
     await this.iterateAll<HardwareLicense>(`hardware/${id}/licenses`, iteratee);
   }
 
-  listUsers() {
-    return this.listAll<SnipeItUser>('users');
+  async iterateUsers(iteratee: ResourceIteratee<SnipeItUser>) {
+    await this.iterateAll<SnipeItUser>('users', iteratee);
   }
 
-  listConsumableUsers(consumableId: string) {
-    return this.listAll<ConsumableUser>(
-      `consumables/view/${consumableId}/users`,
+  async iterateConsumableUsers(
+    id: string,
+    iteratee: ResourceIteratee<ConsumableUser>,
+  ) {
+    await this.iterateAll<ConsumableUser>(
+      `consumables/view/${id}/users`,
+      iteratee,
     );
   }
 
@@ -163,7 +171,7 @@ export class ServicesClient {
         delay: 200,
         factor: 2,
         jitter: true,
-        handleError: async (err, context) => {
+        handleError: (err, context) => {
           if (!err.retryable) {
             // can't retry this? just abort
             context.abort();
@@ -174,7 +182,17 @@ export class ServicesClient {
               { retryAfter },
               `Received a rate limit error.  Waiting before retrying.`,
             );
-            await sleep(retryAfter);
+            sleep(retryAfter)
+              .then(() => {
+                this.logger.info(`Slept for ${retryAfter}ms. Retrying...`);
+              })
+              .catch((err) => {
+                // this should never happen, but just in case
+                this.logger.error(
+                  err,
+                  `Error while waiting to retry after rate limit error.`,
+                );
+              });
           }
         },
       },

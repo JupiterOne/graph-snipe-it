@@ -58,8 +58,8 @@ export function convertHardware(
           data.status_label?.status_meta === 'deployable'
             ? 'ready'
             : data.status_label?.name?.match(/broken/i)
-            ? 'defective'
-            : data.status_label?.status_meta,
+              ? 'defective'
+              : data.status_label?.status_meta,
         notes: data.notes ? [data.notes] : undefined,
         location: data.location?.name,
         locationId: data.location?.id,

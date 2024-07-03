@@ -63,33 +63,32 @@ export async function buildUserConsumableRelationships({
   await jobState.iterateEntities(
     { _type: Entities.CONSUMABLE._type },
     async (consumableEntity) => {
-      const consumableUsers = await client.listConsumableUsers(
+      await client.iterateConsumableUsers(
         consumableEntity.consumableId as string,
-      );
+        async (consumableUser) => {
+          // currently, the list of users that use a consumables is returned
+          // as a list of HTML elements containing URL links to those users
+          // cheerio, a jQuery implementation for the server side, is used
+          // to easily manipulate the HTML elements and retrieve the user Id
+          if (consumableUser.name) {
+            const $ = cheerio.load(consumableUser.name);
+            const userLink = $('a').attr('href') as string;
+            const userId = userLink.split('/').pop() as string;
 
-      // currently, the list of users that use a consumables is returned
-      // as a list of HTML elements containing URL links to those users
-      // cheerio, a jQuery implementation for the server side, is used
-      // to easily manipulate the HTML elements and retrieve the user Id
-      consumableUsers.map(async (consumableUser) => {
-        if (consumableUser.name) {
-          const $ = cheerio.load(consumableUser.name);
-          const userLink = $('a').attr('href') as string;
-          const userId = userLink.split('/').pop() as string;
+            const userEntity = await jobState.findEntity(getUserKey(userId));
 
-          const userEntity = await jobState.findEntity(getUserKey(userId));
-
-          if (userEntity) {
-            await jobState.addRelationship(
-              createDirectRelationship({
-                _class: RelationshipClass.USES,
-                from: userEntity,
-                to: consumableEntity,
-              }),
-            );
+            if (userEntity) {
+              await jobState.addRelationship(
+                createDirectRelationship({
+                  _class: RelationshipClass.USES,
+                  from: userEntity,
+                  to: consumableEntity,
+                }),
+              );
+            }
           }
-        }
-      });
+        },
+      );
     },
   );
 }

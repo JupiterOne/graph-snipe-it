@@ -25,11 +25,10 @@ export async function fetchUsers({
   const client = createServicesClient(instance, logger);
   const accountEntity = (await jobState.getData(ACCOUNT_ENTITY_KEY)) as Entity;
 
-  const users = await client.listUsers();
-  const userEntities = users.map(convertUser);
-  await jobState.addEntities(userEntities);
+  await client.iterateUsers(async (user) => {
+    const userEntity = convertUser(user);
+    await jobState.addEntity(userEntity);
 
-  userEntities.map(async (userEntity) => {
     await jobState.addRelationships([
       createDirectRelationship({
         from: accountEntity,

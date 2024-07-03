@@ -8,12 +8,13 @@ export interface IntegrationConfig extends IntegrationInstanceConfig {
   apiToken: string;
 }
 
-export const instanceConfigFields: IntegrationInstanceConfigFieldMap<IntegrationConfig> = {
-  hostname: {
-    type: 'string',
-  },
-  apiToken: {
-    type: 'string',
-    mask: true,
-  },
-};
+export const instanceConfigFields: IntegrationInstanceConfigFieldMap<IntegrationConfig> =
+  {
+    hostname: {
+      type: 'string',
+    },
+    apiToken: {
+      type: 'string',
+      mask: true,
+    },
+  };

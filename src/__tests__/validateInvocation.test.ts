@@ -13,7 +13,7 @@ test('rejects if apiToken is not present', async () => {
   fetchMock.mockResponse('{}');
 
   const context = createMockExecutionContext<IntegrationConfig>();
-  context.instance.config['apiToken'] = (undefined as unknown) as string;
+  context.instance.config['apiToken'] = undefined as unknown as string;
 
   await expect(validateInvocation(context)).rejects.toThrow(
     /Provider authentication failed/,

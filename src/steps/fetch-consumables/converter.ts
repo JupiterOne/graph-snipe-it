@@ -3,7 +3,6 @@ import {
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
 import { SnipeItConsumable } from '../../collector';
-import { Entities } from '../constants';
 import { createConsumableAssignEntity } from '../../entities';
 
 export function getConsumableKey(id: number): string {
@@ -21,6 +20,7 @@ export function convertConsumable(
         id: getConsumableKey(data.id),
         consumableId: data.id,
         displayName: data.name,
+        name: data.name,
         image: data.image,
         'category.id': data.category?.id,
         categoryId: data.category?.id,
@@ -32,9 +32,13 @@ export function convertConsumable(
         companyName: data.company?.name,
         itemNo: data.item_no,
         'location.id': data.location?.id,
+        locationId: data.location?.id,
         'location.name': data.location?.name,
+        locationName: data.location?.name,
         'manufacturer.id': data.manufacturer?.id,
+        manufacturerId: data.manufacturer?.id,
         'manufacturer.name': data.manufacturer?.name,
+        manufacturerName: data.manufacturer?.name,
         minAmt: data.min_amt,
         modelNumber: data.model_number,
         remaining: data.remaining,
@@ -45,11 +49,15 @@ export function convertConsumable(
         notes: data.notes ? [data.notes] : undefined,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
-        userCanCheckout: data.user_can_checkout,
+        userCanCheckout: Boolean(data.user_can_checkout),
         'availableActions.checkout': data.available_actions?.checkout,
+        availableActionsCheckout: data.available_actions?.checkout,
         'availableActions.checkin': data.available_actions?.checkin,
+        availableActionsCheckin: data.available_actions?.checkin,
         'availableActions.update': data.available_actions?.update,
+        availableActionsUpdate: data.available_actions?.update,
         'availableActions.delete': data.available_actions?.delete,
+        availableActionsDelete: data.available_actions?.delete,
       }),
     },
   });

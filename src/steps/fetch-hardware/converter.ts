@@ -10,6 +10,7 @@ import {
 import { SnipeItHardware } from '../../collector';
 import { Entities, MappedRelationships } from '../constants';
 import { getLocationKey } from '../fetch-account/converter';
+import { createHardwareAssignEntity } from '../../entities';
 
 export function getHardwareKey(id: number): string {
   return `snipeit_hardware:${id}`;
@@ -34,10 +35,8 @@ export function convertHardware(
   return createIntegrationEntity({
     entityData: {
       source: data,
-      assign: {
+      assign: createHardwareAssignEntity({
         _key: hardwareKey,
-        _type: Entities.HARDWARE._type,
-        _class: Entities.HARDWARE._class,
         id: String(hardwareId),
         deviceId: String(hardwareId),
         name: data.name,
@@ -51,7 +50,8 @@ export function convertHardware(
         model: data.model?.name ?? null,
         serial: data.serial,
         byod: data.byod,
-        cost: Number(data.purchase_cost),
+        BYOD: data.byod,
+        cost: Number(data.purchase_cost) || undefined,
         supplier: data.supplier?.name,
         EOL: !!data.eol,
         status:
@@ -59,19 +59,21 @@ export function convertHardware(
             ? 'ready'
             : data.status_label?.name?.match(/broken/i)
               ? 'defective'
-              : data.status_label?.status_meta,
+              : (data.status_label?.status_meta as any), // TODO: Should match Device _class defined status options
         notes: data.notes ? [data.notes] : undefined,
         location: data.location?.name,
         locationId: data.location?.id,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
-        lastSeenOn: [
-          parseTimePropertyValue(data.last_checkout?.datetime),
-          parseTimePropertyValue(data.updated_at?.datetime),
-        ].sort()[0],
+        lastSeenOn:
+          [
+            parseTimePropertyValue(data.last_checkout?.datetime),
+            parseTimePropertyValue(data.updated_at?.datetime),
+          ].sort()[0] ?? null,
         statusMeta: data.status_label.status_meta,
         statusName: data.status_label.name,
-      },
+        purchaseCost: data.purchase_cost,
+      }),
     },
   });
 }

@@ -1,11 +1,14 @@
 import {
   Entity,
   createIntegrationEntity,
-  convertProperties,
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
 import { Location } from '../../collector';
-import { Entities } from '../constants';
+import {
+  createAccountAssignEntity,
+  createLocationAssignEntity,
+  createServiceAssignEntity,
+} from '../../entities';
 
 export function getAccountKey(id: string): string {
   return `snipeit_account:${id}`;
@@ -20,27 +23,23 @@ export function getLocationKey(id: number): string {
 }
 
 export function getAccountEntity(instance: any): Entity {
-  return {
+  return createAccountAssignEntity({
     _key: getAccountKey(instance.id),
-    _type: Entities.ACCOUNT._type,
-    _class: Entities.ACCOUNT._class,
     name: instance.name,
     displayName: instance.name,
     description: instance.description,
-  };
+  });
 }
 
 export function getServiceEntity(instance: any): Entity {
-  return {
+  return createServiceAssignEntity({
     _key: getServiceKey(instance.id),
-    _type: Entities.SERVICE._type,
-    _class: Entities.SERVICE._class,
     name: 'Snipe-IT ITAM',
     displayName: 'Snipe-IT ITAM',
     description: 'IT Asset Management (ITAM)',
     category: ['infrastructure'],
     function: ['ITAM'],
-  };
+  });
 }
 
 export function convertLocation(
@@ -49,17 +48,30 @@ export function convertLocation(
   return createIntegrationEntity({
     entityData: {
       source: data,
-      assign: {
-        ...convertProperties(data),
+      assign: createLocationAssignEntity({
         _key: getLocationKey(data.id),
-        _type: Entities.LOCATION._type,
-        _class: Entities.LOCATION._class,
         id: getLocationKey(data.id),
-        locationId: data.id,
         displayName: data.name,
+        name: data.name,
+        locationId: data.id,
+        image: data.image,
+        address: data.address,
+        address2: data.address2,
+        city: data.city,
+        state: data.state,
+        country: data.country,
+        zip: data.zip,
+        assignedAssetsCount: data.assigned_assets_count,
+        assetsCount: data.assets_count,
+        rtdAssetsCount: data.rtd_assets_count,
+        usersCount: data.users_count,
+        currency: data.currency,
+        isUpdateActionAvailable: Boolean(data.available_actions?.update),
+        isDeleteActionAvailable: Boolean(data.available_actions?.delete),
+        isCloneActionAvailable: Boolean(data.available_actions?.clone),
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
-      },
+      }),
     },
   });
 }

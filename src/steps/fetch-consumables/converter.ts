@@ -4,6 +4,7 @@ import {
 } from '@jupiterone/integration-sdk-core';
 import { SnipeItConsumable } from '../../collector';
 import { Entities } from '../constants';
+import { createConsumableAssignEntity } from '../../entities';
 
 export function getConsumableKey(id: number): string {
   return `snipeit_consumable_resource:${id}`;
@@ -15,18 +16,20 @@ export function convertConsumable(
   return createIntegrationEntity({
     entityData: {
       source: data,
-      assign: {
+      assign: createConsumableAssignEntity({
         _key: getConsumableKey(data.id),
-        _type: Entities.CONSUMABLE._type,
-        _class: Entities.CONSUMABLE._class,
         id: getConsumableKey(data.id),
         consumableId: data.id,
         displayName: data.name,
         image: data.image,
         'category.id': data.category?.id,
+        categoryId: data.category?.id,
         'category.name': data.category?.name,
+        categoryName: data.category?.name,
         'company.id': data.company?.id,
+        companyId: data.company?.id,
         'company.name': data.company?.name,
+        companyName: data.company?.name,
         itemNo: data.item_no,
         'location.id': data.location?.id,
         'location.name': data.location?.name,
@@ -47,7 +50,7 @@ export function convertConsumable(
         'availableActions.checkin': data.available_actions?.checkin,
         'availableActions.update': data.available_actions?.update,
         'availableActions.delete': data.available_actions?.delete,
-      },
+      }),
     },
   });
 }

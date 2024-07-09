@@ -28,6 +28,7 @@ export function getAccountEntity(instance: any): Entity {
     name: instance.name,
     displayName: instance.name,
     description: instance.description,
+    vendor: 'Snipe-IT',
   });
 }
 

@@ -13,6 +13,7 @@ export const [AccountEntityMetadata, createAccountAssignEntity] =
       name: SchemaType.String(),
       displayName: SchemaType.String(),
       description: SchemaType.Optional(SchemaType.String()),
+      vendor: SchemaType.String(),
     }),
   });
 
@@ -33,18 +34,30 @@ export const [LocationEntityMetadata, createLocationAssignEntity] =
     description: 'Snipe-IT Location',
     schema: SchemaType.Object({
       locationId: SchemaType.Number(),
-      image: SchemaType.Optional(SchemaType.String()),
-      address: SchemaType.Optional(SchemaType.String()),
-      address2: SchemaType.Optional(SchemaType.String()),
+      image: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      address: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      address2: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       city: SchemaType.String(),
-      state: SchemaType.Optional(SchemaType.String()),
+      state: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       country: SchemaType.String(),
-      zip: SchemaType.Optional(SchemaType.String()),
+      zip: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       assignedAssetsCount: SchemaType.Number(),
       assetsCount: SchemaType.Number(),
       rtdAssetsCount: SchemaType.Number(),
       usersCount: SchemaType.Number(),
-      currency: SchemaType.Optional(SchemaType.String()),
+      currency: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       isUpdateActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
       isDeleteActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
       isCloneActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
@@ -78,7 +91,9 @@ export const [HardwareEntityMetadata, createHardwareAssignEntity] =
       locationId: SchemaType.Optional(SchemaType.Number()),
       statusMeta: SchemaType.String(SchemaType.String()),
       statusName: SchemaType.String(SchemaType.String()),
-      purchaseCost: SchemaType.Optional(SchemaType.String()),
+      purchaseCost: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
     }),
   });
 
@@ -90,7 +105,9 @@ export const [ConsumableEntityMetadata, createConsumableAssignEntity] =
     description: 'Snipe-IT Consumable',
     schema: SchemaType.Object({
       consumableId: SchemaType.Number(),
-      image: SchemaType.Optional(SchemaType.String()),
+      image: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       'category.id': SchemaType.Optional(
         SchemaType.Number({
           deprecated: true,
@@ -129,10 +146,14 @@ export const [ConsumableEntityMetadata, createConsumableAssignEntity] =
       'manufacturer.name': SchemaType.Optional(SchemaType.String()),
       manufacturerName: SchemaType.Optional(SchemaType.String()),
       minAmt: SchemaType.Optional(SchemaType.Number()),
-      modelNumber: SchemaType.Optional(SchemaType.String()),
+      modelNumber: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       remaining: SchemaType.Optional(SchemaType.Number()),
       orderNumber: SchemaType.Optional(SchemaType.String()),
-      purchaseCost: SchemaType.Optional(SchemaType.String()),
+      purchaseCost: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       purchaseDate: SchemaType.Optional(SchemaType.Number()),
       qty: SchemaType.Optional(SchemaType.Number()),
       notes: SchemaType.Optional(SchemaType.Array(SchemaType.String())),
@@ -187,7 +208,9 @@ export const [LicenseEntityMetadata, createLicenseAssignEntity] =
       purchaseDate: SchemaType.Optional(SchemaType.Number()),
       terminationDate: SchemaType.Optional(SchemaType.Number()),
       depreciation: SchemaType.Optional(SchemaType.String()),
-      purchaseCost: SchemaType.Optional(SchemaType.String()),
+      purchaseCost: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       notes: SchemaType.Optional(SchemaType.Array(SchemaType.String())),
       expirationDate: SchemaType.Optional(SchemaType.Number()),
       seats: SchemaType.Optional(SchemaType.Number()),
@@ -267,7 +290,9 @@ export const [UserEntityMetadata, createUserAssignEntity] =
       avatar: SchemaType.Optional(SchemaType.String()),
       remote: SchemaType.Boolean(),
       locale: SchemaType.Optional(SchemaType.String()),
-      employeeNum: SchemaType.Optional(SchemaType.String()),
+      employeeNum: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       'manager.id': SchemaType.Optional(
         SchemaType.Number({
           deprecated: true,
@@ -282,14 +307,30 @@ export const [UserEntityMetadata, createUserAssignEntity] =
         }),
       ),
       managerName: SchemaType.Optional(SchemaType.String()),
-      jobtitle: SchemaType.Optional(SchemaType.String()),
-      phone: SchemaType.Optional(SchemaType.String()),
-      website: SchemaType.Optional(SchemaType.String()),
-      address: SchemaType.Optional(SchemaType.String()),
-      city: SchemaType.Optional(SchemaType.String()),
-      state: SchemaType.Optional(SchemaType.String()),
-      country: SchemaType.Optional(SchemaType.String()),
-      zip: SchemaType.Optional(SchemaType.String()),
+      jobtitle: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      phone: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      website: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      address: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      city: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      state: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      country: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
+      zip: SchemaType.Optional(
+        SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
+      ),
       email: SchemaType.Optional(
         SchemaType.String({
           format: 'email',

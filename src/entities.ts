@@ -175,7 +175,84 @@ export const [LicenseEntityMetadata, createLicenseAssignEntity] =
     _type: createEntityType('licensed_application'),
     description: 'Snipe-IT License',
     schema: SchemaType.Object({
-      name: SchemaType.String(),
+      licenseId: SchemaType.Optional(SchemaType.Number()),
+      company: SchemaType.Optional(SchemaType.String()),
+      'manufacturer.id': SchemaType.Optional(SchemaType.Number()),
+      manufacturerId: SchemaType.Optional(SchemaType.Number()),
+      'manufacturer.name': SchemaType.Optional(SchemaType.String()),
+      manufacturerName: SchemaType.Optional(SchemaType.String()),
+      productKey: SchemaType.Optional(SchemaType.String()),
+      orderNumber: SchemaType.Optional(SchemaType.String()),
+      purchaseOrder: SchemaType.Optional(SchemaType.String()),
+      purchaseDate: SchemaType.Optional(SchemaType.Number()),
+      terminationDate: SchemaType.Optional(SchemaType.Number()),
+      depreciation: SchemaType.Optional(SchemaType.String()),
+      purchaseCost: SchemaType.Optional(SchemaType.String()),
+      notes: SchemaType.Optional(SchemaType.Array(SchemaType.String())),
+      expirationDate: SchemaType.Optional(SchemaType.Number()),
+      seats: SchemaType.Optional(SchemaType.Number()),
+      freeSeatsCount: SchemaType.Optional(SchemaType.Number()),
+      licenseName: SchemaType.Optional(SchemaType.String()),
+      licenseEmail: SchemaType.Optional(SchemaType.String()),
+      reassignable: SchemaType.Optional(SchemaType.Boolean()),
+      maintained: SchemaType.Optional(SchemaType.Boolean()),
+      'supplier.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use supplierId instead.',
+        }),
+      ),
+      supplierId: SchemaType.Optional(SchemaType.Number()),
+      'supplier.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use supplierName instead.',
+        }),
+      ),
+      supplierName: SchemaType.Optional(SchemaType.String()),
+      'category.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use categoryId instead.',
+        }),
+      ),
+      categoryId: SchemaType.Optional(SchemaType.Number()),
+      'category.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use categoryName instead.',
+        }),
+      ),
+      categoryName: SchemaType.Optional(SchemaType.String()),
+      userCanCheckout: SchemaType.Optional(SchemaType.Boolean()),
+      'availableActions.checkout': SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use availableActionsCheckout instead.',
+        }),
+      ),
+      availableActionsCheckout: SchemaType.Optional(SchemaType.Boolean()),
+      'availableActions.checkin': SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use availableActionsCheckin instead.',
+        }),
+      ),
+      availableActionsCheckin: SchemaType.Optional(SchemaType.Boolean()),
+      'availableActions.update': SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use availableActionsUpdate instead.',
+        }),
+      ),
+      availableActionsUpdate: SchemaType.Optional(SchemaType.Boolean()),
+      'availableActions.delete': SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use availableActionsDelete instead.',
+        }),
+      ),
+      availableActionsDelete: SchemaType.Optional(SchemaType.Boolean()),
     }),
   });
 
@@ -186,7 +263,92 @@ export const [UserEntityMetadata, createUserAssignEntity] =
     _type: createEntityType('user'),
     description: 'Snipe-IT User',
     schema: SchemaType.Object({
-      name: SchemaType.String(),
+      userId: SchemaType.Optional(SchemaType.Number()),
+      avatar: SchemaType.Optional(SchemaType.String()),
+      remote: SchemaType.Boolean(),
+      locale: SchemaType.Optional(SchemaType.String()),
+      employeeNum: SchemaType.Optional(SchemaType.String()),
+      'manager.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use managerId instead.',
+        }),
+      ),
+      managerId: SchemaType.Optional(SchemaType.Number()),
+      'manager.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use managerName instead.',
+        }),
+      ),
+      managerName: SchemaType.Optional(SchemaType.String()),
+      jobtitle: SchemaType.Optional(SchemaType.String()),
+      phone: SchemaType.Optional(SchemaType.String()),
+      website: SchemaType.Optional(SchemaType.String()),
+      address: SchemaType.Optional(SchemaType.String()),
+      city: SchemaType.Optional(SchemaType.String()),
+      state: SchemaType.Optional(SchemaType.String()),
+      country: SchemaType.Optional(SchemaType.String()),
+      zip: SchemaType.Optional(SchemaType.String()),
+      email: SchemaType.Optional(
+        SchemaType.String({
+          format: 'email',
+        }),
+      ),
+      'department.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use departmentId instead.',
+        }),
+      ),
+      departmentId: SchemaType.Optional(SchemaType.Number()),
+      'department.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use departmentName instead.',
+        }),
+      ),
+      departmentName: SchemaType.Optional(SchemaType.String()),
+      'location.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use locationId instead.',
+        }),
+      ),
+      locationId: SchemaType.Optional(SchemaType.Number()),
+      'location.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use locationName instead.',
+        }),
+      ),
+      locationName: SchemaType.Optional(SchemaType.String()),
+      ldapImport: SchemaType.Boolean(),
+      twoFactorEnrolled: SchemaType.Boolean(),
+      assetsCount: SchemaType.Optional(SchemaType.Number()),
+      licensesCount: SchemaType.Optional(SchemaType.Number()),
+      accessoriesCount: SchemaType.Optional(SchemaType.Number()),
+      consumablesCount: SchemaType.Optional(SchemaType.Number()),
+      'company.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use companyId instead.',
+        }),
+      ),
+      companyId: SchemaType.Optional(SchemaType.Number()),
+      'company.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use companyName instead.',
+        }),
+      ),
+      companyName: SchemaType.Optional(SchemaType.String()),
+      'createdBy.id': SchemaType.Optional(SchemaType.Number()),
+      createdById: SchemaType.Optional(SchemaType.Number()),
+      'createdBy.name': SchemaType.Optional(SchemaType.String()),
+      createdByName: SchemaType.Optional(SchemaType.String()),
+      lastLogin: SchemaType.Optional(SchemaType.Number()),
+      deletedAt: SchemaType.Optional(SchemaType.Number()),
     }),
   });
 

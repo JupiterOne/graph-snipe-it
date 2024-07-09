@@ -3,7 +3,7 @@ import {
   parseTimePropertyValue,
 } from '@jupiterone/integration-sdk-core';
 import { HardwareLicense } from '../../collector';
-import { Entities } from '../constants';
+import { createLicenseAssignEntity } from '../../entities';
 
 export function getLicenseKey(id: string): string {
   return `snipeit_licensed_application:${id}`;
@@ -15,16 +15,17 @@ export function convertLicense(
   return createIntegrationEntity({
     entityData: {
       source: data,
-      assign: {
+      assign: createLicenseAssignEntity({
         _key: getLicenseKey(String(data.id)),
-        _type: Entities.LICENSE._type,
-        _class: Entities.LICENSE._class,
         id: getLicenseKey(String(data.id)),
         licenseId: data.id,
         displayName: data.name,
+        name: data.name,
         company: data.company?.name,
         'manufacturer.id': data.manufacturer?.id,
+        manufacturerId: data.manufacturer?.id,
         'manufacturer.name': data.manufacturer?.name,
+        manufacturerName: data.manufacturer?.name,
         productKey: data.product_key,
         orderNumber: data.order_number,
         purchaseOrder: data.purchase_order,
@@ -43,17 +44,25 @@ export function convertLicense(
         reassignable: data.reassignable,
         maintained: data.maintained,
         'supplier.id': data.supplier?.id,
+        supplierId: data.supplier?.id,
         'supplier.name': data.supplier?.name,
+        supplierName: data.supplier?.name,
         'category.id': data.category?.id,
+        categoryId: data.category?.id,
         'category.name': data.category?.name,
+        categoryName: data.category?.name,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
         userCanCheckout: data.user_can_checkout,
         'availableActions.checkout': data.available_actions?.checkout,
+        availableActionsCheckout: data.available_actions?.checkout,
         'availableActions.checkin': data.available_actions?.checkin,
+        availableActionsCheckin: data.available_actions?.checkin,
         'availableActions.update': data.available_actions?.update,
+        availableActionsUpdate: data.available_actions?.update,
         'availableActions.delete': data.available_actions?.delete,
-      },
+        availableActionsDelete: data.available_actions?.delete,
+      }),
     },
   });
 }

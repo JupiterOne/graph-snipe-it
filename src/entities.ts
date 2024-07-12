@@ -384,9 +384,19 @@ export const [UserEntityMetadata, createUserAssignEntity] =
         }),
       ),
       companyName: SchemaType.Optional(SchemaType.String()),
-      'createdBy.id': SchemaType.Optional(SchemaType.Number()),
+      'createdBy.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use createdById instead.',
+        }),
+      ),
       createdById: SchemaType.Optional(SchemaType.Number()),
-      'createdBy.name': SchemaType.Optional(SchemaType.String()),
+      'createdBy.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use createdByName instead.',
+        }),
+      ),
       createdByName: SchemaType.Optional(SchemaType.String()),
       lastLogin: SchemaType.Optional(SchemaType.Number()),
       deletedAt: SchemaType.Optional(SchemaType.Number()),

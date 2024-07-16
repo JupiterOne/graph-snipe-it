@@ -137,13 +137,33 @@ export const [ConsumableEntityMetadata, createConsumableAssignEntity] =
       ),
       companyName: SchemaType.Optional(SchemaType.String()),
       itemNo: SchemaType.Optional(SchemaType.String()),
-      'location.id': SchemaType.Optional(SchemaType.Number()),
+      'location.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use locationId instead.',
+        }),
+      ),
       locationId: SchemaType.Optional(SchemaType.Number()),
-      'location.name': SchemaType.Optional(SchemaType.String()),
+      'location.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use locationName instead.',
+        }),
+      ),
       locationName: SchemaType.Optional(SchemaType.String()),
-      'manufacturer.id': SchemaType.Optional(SchemaType.Number()),
+      'manufacturer.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use manufacturerId instead.',
+        }),
+      ),
       manufacturerId: SchemaType.Optional(SchemaType.Number()),
-      'manufacturer.name': SchemaType.Optional(SchemaType.String()),
+      'manufacturer.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use manufacturerName instead.',
+        }),
+      ),
       manufacturerName: SchemaType.Optional(SchemaType.String()),
       minAmt: SchemaType.Optional(SchemaType.Number()),
       modelNumber: SchemaType.Optional(
@@ -198,9 +218,19 @@ export const [LicenseEntityMetadata, createLicenseAssignEntity] =
     schema: SchemaType.Object({
       licenseId: SchemaType.Optional(SchemaType.Number()),
       company: SchemaType.Optional(SchemaType.String()),
-      'manufacturer.id': SchemaType.Optional(SchemaType.Number()),
+      'manufacturer.id': SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use manufacturerId instead.',
+        }),
+      ),
       manufacturerId: SchemaType.Optional(SchemaType.Number()),
-      'manufacturer.name': SchemaType.Optional(SchemaType.String()),
+      'manufacturer.name': SchemaType.Optional(
+        SchemaType.String({
+          deprecated: true,
+          description: 'Please use manufacturerName instead.',
+        }),
+      ),
       manufacturerName: SchemaType.Optional(SchemaType.String()),
       productKey: SchemaType.Optional(SchemaType.String()),
       orderNumber: SchemaType.Optional(SchemaType.String()),

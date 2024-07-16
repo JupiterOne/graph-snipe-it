@@ -30,7 +30,7 @@ export const [LocationEntityMetadata, createLocationAssignEntity] =
   createEntityMetadata({
     resourceName: 'Location',
     _class: ['Site'],
-    _type: createEntityType('location'),
+    _type: 'location', // This is unusual and does not follow modern naming conventions, however effects of changing this are potentially significant.
     description: 'Snipe-IT Location',
     schema: SchemaType.Object({
       locationId: SchemaType.Number(),
@@ -174,38 +174,50 @@ export const [ConsumableEntityMetadata, createConsumableAssignEntity] =
       purchaseCost: SchemaType.Optional(
         SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
       ),
-      purchaseDate: SchemaType.Optional(SchemaType.Number()),
+      purchaseDate: SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use purchasedOn instead.',
+        }),
+      ),
+      purchasedOn: SchemaType.Optional(SchemaType.Number()),
       qty: SchemaType.Optional(SchemaType.Number()),
       notes: SchemaType.Optional(SchemaType.Array(SchemaType.String())),
-      userCanCheckout: SchemaType.Boolean(),
+      userCanCheckout: SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use isUserAbleToCheckout instead.',
+        }),
+      ),
+      isUserAbleToCheckout: SchemaType.Optional(SchemaType.Boolean()),
       'availableActions.checkout': SchemaType.Optional(
         SchemaType.Boolean({
           deprecated: true,
-          description: 'Please use availableActionsCheckout instead.',
+          description: 'Please use isCheckoutActionAvailable instead.',
         }),
       ),
-      availableActionsCheckout: SchemaType.Optional(SchemaType.Boolean()),
+      isCheckoutActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
       'availableActions.checkin': SchemaType.Optional(
         SchemaType.Boolean({
           deprecated: true,
-          description: 'Please use availableActionsCheckin instead.',
+          description: 'Please use isCheckinActionAvailable instead.',
         }),
       ),
-      availableActionsCheckin: SchemaType.Optional(SchemaType.Boolean()),
+      isCheckinActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
       'availableActions.update': SchemaType.Optional(
         SchemaType.Boolean({
           deprecated: true,
-          description: 'Please use availableActionsUpdate instead.',
+          description: 'Please use isUpdateActionAvailable instead.',
         }),
       ),
-      availableActionsUpdate: SchemaType.Optional(SchemaType.Boolean()),
+      isUpdateActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
       'availableActions.delete': SchemaType.Optional(
         SchemaType.Boolean({
           deprecated: true,
-          description: 'Please use availableActionsDelete instead.',
+          description: 'Please use isDeleteActionAvailable instead.',
         }),
       ),
-      availableActionsDelete: SchemaType.Optional(SchemaType.Boolean()),
+      isDeleteActionAvailable: SchemaType.Optional(SchemaType.Boolean()),
     }),
   });
 
@@ -235,8 +247,20 @@ export const [LicenseEntityMetadata, createLicenseAssignEntity] =
       productKey: SchemaType.Optional(SchemaType.String()),
       orderNumber: SchemaType.Optional(SchemaType.String()),
       purchaseOrder: SchemaType.Optional(SchemaType.String()),
-      purchaseDate: SchemaType.Optional(SchemaType.Number()),
-      terminationDate: SchemaType.Optional(SchemaType.Number()),
+      purchaseDate: SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use purchasedOn instead.',
+        }),
+      ),
+      purchasedOn: SchemaType.Optional(SchemaType.Number()),
+      terminationDate: SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use terminationOn instead.',
+        }),
+      ),
+      terminationOn: SchemaType.Optional(SchemaType.Number()),
       depreciation: SchemaType.Optional(SchemaType.String()),
       purchaseCost: SchemaType.Optional(
         SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
@@ -394,7 +418,13 @@ export const [UserEntityMetadata, createUserAssignEntity] =
         }),
       ),
       locationName: SchemaType.Optional(SchemaType.String()),
-      ldapImport: SchemaType.Boolean(),
+      ldapImport: SchemaType.Optional(
+        SchemaType.Boolean({
+          deprecated: true,
+          description: 'Please use isLdapImport instead.',
+        }),
+      ),
+      isLdapImport: SchemaType.Optional(SchemaType.Boolean()),
       twoFactorEnrolled: SchemaType.Boolean(),
       assetsCount: SchemaType.Optional(SchemaType.Number()),
       licensesCount: SchemaType.Optional(SchemaType.Number()),

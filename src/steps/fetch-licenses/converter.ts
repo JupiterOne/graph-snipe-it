@@ -30,9 +30,11 @@ export function convertLicense(
         orderNumber: data.order_number,
         purchaseOrder: data.purchase_order,
         purchaseDate: parseTimePropertyValue(data.purchase_date?.datetime),
+        purchasedOn: parseTimePropertyValue(data.purchase_date?.datetime),
         terminationDate: parseTimePropertyValue(
           data.termination_date?.datetime,
         ),
+        terminationOn: parseTimePropertyValue(data.termination_date?.datetime),
         depreciation: data.depreciation?.name,
         purchaseCost: data.purchase_cost_numeric ?? data.purchase_cost,
         notes: data.notes ? [data.notes] : undefined,

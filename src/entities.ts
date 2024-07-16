@@ -266,7 +266,13 @@ export const [LicenseEntityMetadata, createLicenseAssignEntity] =
         SchemaType.Union([SchemaType.String(), SchemaType.Null()]),
       ),
       notes: SchemaType.Optional(SchemaType.Array(SchemaType.String())),
-      expirationDate: SchemaType.Optional(SchemaType.Number()),
+      expirationDate: SchemaType.Optional(
+        SchemaType.Number({
+          deprecated: true,
+          description: 'Please use expirationOn instead.',
+        }),
+      ),
+      expirationOn: SchemaType.Optional(SchemaType.Number()),
       seats: SchemaType.Optional(SchemaType.Number()),
       freeSeatsCount: SchemaType.Optional(SchemaType.Number()),
       licenseName: SchemaType.Optional(SchemaType.String()),

@@ -39,6 +39,7 @@ export function convertLicense(
         purchaseCost: data.purchase_cost_numeric ?? data.purchase_cost,
         notes: data.notes ? [data.notes] : undefined,
         expirationDate: parseTimePropertyValue(data.expiration_date?.datetime),
+        expirationOn: parseTimePropertyValue(data.expiration_date?.datetime),
         seats: data.seats,
         freeSeatsCount: data.free_seats_count,
         licenseName: data.license_name,

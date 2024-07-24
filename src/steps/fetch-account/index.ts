@@ -46,6 +46,10 @@ export async function fetchAccount({
       from: accountEntity,
       to: locationEntity,
       _class: RelationshipClass.MANAGES,
+      properties: {
+        // If this is not present, the generated type will be 'snipeit_account_manages_managed_location'. We want it to be 'snipeit_account_manages_location'.
+        _type: Relationships.ACCOUNT_MANAGES_LOCATION._type,
+      },
     }),
   );
   await jobState.addRelationships(relationships);

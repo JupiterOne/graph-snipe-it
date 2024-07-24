@@ -30,7 +30,7 @@ export const [LocationEntityMetadata, createLocationAssignEntity] =
   createEntityMetadata({
     resourceName: 'Location',
     _class: ['Site'],
-    _type: 'location', // This is unusual and does not follow modern naming conventions, however effects of changing this are potentially significant.
+    _type: createEntityType('location'),
     description: 'Snipe-IT Location',
     schema: SchemaType.Object({
       locationId: SchemaType.Number(),

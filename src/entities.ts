@@ -30,7 +30,7 @@ export const [LocationEntityMetadata, createLocationAssignEntity] =
   createEntityMetadata({
     resourceName: 'Location',
     _class: ['Site'],
-    _type: createEntityType('location'),
+    _type: createEntityType('managed_location'),
     description: 'Snipe-IT Location',
     schema: SchemaType.Object({
       locationId: SchemaType.Number(),

@@ -83,7 +83,7 @@ The following entities are created:
 | Consumable | `snipeit_consumable_resource`  | `Resource`      |
 | Hardware   | `snipeit_hardware`             | `Device`        |
 | License    | `snipeit_licensed_application` | `Application`   |
-| Location   | `snipeit_location`             | `Site`          |
+| Location   | `snipeit_managed_location`     | `Site`          |
 | Service    | `snipeit_service`              | `Service`       |
 | User       | `snipeit_user`                 | `User`          |
 
@@ -96,7 +96,7 @@ The following relationships are created:
 | `snipeit_account`     | **HAS**               | `snipeit_consumable_resource`  |
 | `snipeit_account`     | **MANAGES**           | `snipeit_hardware`             |
 | `snipeit_account`     | **HAS**               | `snipeit_licensed_application` |
-| `snipeit_account`     | **MANAGES**           | `snipeit_location`             |
+| `snipeit_account`     | **MANAGES**           | `snipeit_managed_location`     |
 | `snipeit_account`     | **PROVIDES**          | `snipeit_service`              |
 | `snipeit_account`     | **HAS**               | `snipeit_user`                 |
 | `snipeit_hardware`    | **INSTALLED**         | `snipeit_licensed_application` |
@@ -107,10 +107,10 @@ The following relationships are created:
 
 The following mapped relationships are created:
 
-| Source Entity `_type` | Relationship `_class` | Target Entity `_type` | Direction |
-| --------------------- | --------------------- | --------------------- | --------- |
-| `snipeit_location`    | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
-| `snipeit_user`        | **IS**                | `*snipeit_person*`    | FORWARD   |
+| Source Entity `_type`      | Relationship `_class` | Target Entity `_type` | Direction |
+| -------------------------- | --------------------- | --------------------- | --------- |
+| `snipeit_managed_location` | **HAS**               | `*snipeit_hardware*`  | FORWARD   |
+| `snipeit_user`             | **IS**                | `*snipeit_person*`    | FORWARD   |
 
 <!--
 ********************************************************************************

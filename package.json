@@ -1,6 +1,6 @@
 {
   "name": "@jupiterone/graph-snipe-it",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "A graph conversion tool for https://snipeitapp.com/",
   "repository": {
     "type": "git",

@@ -1,3 +1,19 @@
+# v4.3.0 (Wed Jul 24 2024)
+
+#### 🚀 Enhancement
+
+- APP-15551 - Update to use createIntegrationHelpers and expose entity type schemas [#55](https://github.com/JupiterOne/graph-snipe-it/pull/55) ([@jzolo22](https://github.com/jzolo22))
+
+#### 🐛 Bug Fix
+
+- APP-15551 - Updating integration to prep for integration helpers [#54](https://github.com/JupiterOne/graph-snipe-it/pull/54) ([@jzolo22](https://github.com/jzolo22))
+
+#### Authors: 1
+
+- Julia Zolotarev ([@jzolo22](https://github.com/jzolo22))
+
+---
+
 # Changelog
 
 All notable changes to this project will be documented in this file.

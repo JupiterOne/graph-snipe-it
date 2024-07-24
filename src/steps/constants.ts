@@ -5,6 +5,16 @@ import {
   StepMappedRelationshipMetadata,
   StepRelationshipMetadata,
 } from '@jupiterone/integration-sdk-core';
+import {
+  AccountEntityMetadata,
+  ConsumableEntityMetadata,
+  HardwareEntityMetadata,
+  LicenseEntityMetadata,
+  LocationEntityMetadata,
+  PersonEntityMetadata,
+  ServiceEntityMetadata,
+  UserEntityMetadata,
+} from '../entities';
 
 export const ACCOUNT_ENTITY_KEY = 'entity:account';
 
@@ -29,46 +39,14 @@ export const Entities: Record<
   | 'PERSON',
   StepEntityMetadata
 > = {
-  ACCOUNT: {
-    resourceName: 'Account',
-    _type: 'snipeit_account',
-    _class: ['Account'],
-  },
-  SERVICE: {
-    resourceName: 'Service',
-    _type: 'snipeit_service',
-    _class: ['Service'],
-  },
-  LOCATION: {
-    resourceName: 'Location',
-    _type: 'location',
-    _class: ['Site'],
-  },
-  HARDWARE: {
-    resourceName: 'Hardware',
-    _type: 'snipeit_hardware',
-    _class: ['Device'],
-  },
-  CONSUMABLE: {
-    resourceName: 'Consumable',
-    _type: 'snipeit_consumable_resource',
-    _class: ['Resource'],
-  },
-  LICENSE: {
-    resourceName: 'License',
-    _type: 'snipeit_licensed_application',
-    _class: ['Application'],
-  },
-  USER: {
-    resourceName: 'User',
-    _type: 'snipeit_user',
-    _class: ['User'],
-  },
-  PERSON: {
-    resourceName: 'Person',
-    _type: 'person',
-    _class: ['Person'],
-  },
+  ACCOUNT: AccountEntityMetadata,
+  SERVICE: ServiceEntityMetadata,
+  LOCATION: LocationEntityMetadata,
+  HARDWARE: HardwareEntityMetadata,
+  CONSUMABLE: ConsumableEntityMetadata,
+  LICENSE: LicenseEntityMetadata,
+  USER: UserEntityMetadata,
+  PERSON: PersonEntityMetadata,
 };
 
 export const Relationships: Record<

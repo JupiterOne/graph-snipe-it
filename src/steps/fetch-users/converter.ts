@@ -8,6 +8,7 @@ import {
 } from '@jupiterone/integration-sdk-core';
 import { SnipeItUser } from '../../collector';
 import { Entities, MappedRelationships } from '../constants';
+import { createUserAssignEntity } from '../../entities';
 
 export function getUserKey(id: string): string {
   return `snipeit_user:${id}`;
@@ -23,22 +24,23 @@ export function convertUser(
   return createIntegrationEntity({
     entityData: {
       source: data,
-      assign: {
+      assign: createUserAssignEntity({
         _key: getUserKey(String(data.id)),
-        _type: Entities.USER._type,
-        _class: Entities.USER._class,
         id: getUserKey(String(data.id)),
         userId: data.id,
         displayName: data.name,
+        name: data.name,
         avatar: data.avatar,
         firstName: data.first_name,
         lastName: data.last_name,
         username: data.username,
-        remote: data.remote,
+        remote: Boolean(data.remote),
         locale: data.locale,
         employeeNum: data.employee_num,
         'manager.id': data.manager?.id,
+        managerId: data.manager?.id,
         'manager.name': data.manager?.name,
+        managerName: data.manager?.name,
         jobtitle: data.jobtitle,
         phone: data.phone,
         website: data.website,
@@ -47,15 +49,20 @@ export function convertUser(
         state: data.state,
         country: data.country,
         zip: data.zip,
-        ...(data.email && { email: data.email }),
-        ...(emailDomain && { emailDomain: [emailDomain] }),
-        ...(shortLoginId && { shortLoginId }),
+        email: data.email,
+        emailDomain: emailDomain ? [emailDomain] : undefined,
+        shortLoginId: shortLoginId,
         'department.id': data.department?.id,
+        departmentId: data.department?.id,
         'department.name': data.department?.name,
+        departmentName: data.department?.name,
         'location.id': data.location?.id,
+        locationId: data.location?.id,
         'location.name': data.location?.name,
+        locationName: data.location?.name,
         notes: data.notes ? [data.notes] : undefined,
         ...(data.permissions && {
+          // TODO: Replace all dot separated properties with camelCased
           'permissions.superuser': data.permissions.superuser,
           'permissions.admin': data.permissions.admin,
           'permissions.import': data.permissions.import,
@@ -182,21 +189,26 @@ export function convertUser(
         }),
         active: data.activated,
         ldapImport: data.ldap_import,
-        mfaEnabled: Boolean(data.two_factor_activated),
-        twoFactorEnrolled: data.two_factor_enrolled,
+        isLdapImport: data.ldap_import,
+        mfaEnabled: data.two_factor_activated,
+        twoFactorEnrolled: Boolean(data.two_factor_enrolled),
         assetsCount: data.assets_count,
         licensesCount: data.licenses_count,
         accessoriesCount: data.accessories_count,
         consumablesCount: data.consumables_count,
         'company.id': data.company?.id,
+        companyId: data.company?.id,
         'company.name': data.company?.name,
+        companyName: data.company?.name,
         'createdBy.id': data.created_by?.id,
+        createdById: data.created_by?.id,
         'createdBy.name': data.created_by?.name,
+        createdByName: data.created_by?.name,
         createdOn: parseTimePropertyValue(data.created_at?.datetime),
         updatedOn: parseTimePropertyValue(data.updated_at?.datetime),
         lastLogin: parseTimePropertyValue(data.last_login?.datetime),
         deletedAt: parseTimePropertyValue(data.deleted_at?.datetime),
-      },
+      }),
     },
   });
 }
